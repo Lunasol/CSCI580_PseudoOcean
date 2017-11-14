@@ -126,3 +126,14 @@ void ID3D11Renderer::CleanupDevice()
 	if (g_pImmediateContext) g_pImmediateContext->Release();
 	if (g_pd3dDevice) g_pd3dDevice->Release();
 }
+
+HRESULT ID3D11Renderer::CompileShader(
+	_In_ LPCWSTR srcFile,
+	_In_ LPCSTR entryPoint,
+	_In_ LPCSTR profile,
+	_Outptr_ ID3DBlob** blob
+)
+{
+	// TODO
+	return HRESULT();
+}

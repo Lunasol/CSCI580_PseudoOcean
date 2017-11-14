@@ -17,7 +17,7 @@
 #include <d3dx11.h>
 #include "resource.h"
 
-#include "../ID3D11Renderer.h"
+#include "./ID3D11Renderer.h"
 
 
 //--------------------------------------------------------------------------------------

@@ -11,7 +11,7 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <d3dx11.h>
-#include "CSCI580_Project\Resource.h"
+#include "./Resource.h"
 
 struct ID3D11Renderer
 {
@@ -19,8 +19,15 @@ struct ID3D11Renderer
 	~ID3D11Renderer();
 
 	HRESULT InitDevice(HWND *g_hWnd);
+	HRESULT CompileShader(
+		_In_ LPCWSTR srcFile, 
+		_In_ LPCSTR entryPoint, 
+		_In_ LPCSTR profile, 
+		_Outptr_ ID3DBlob** blob
+	);
 	void CleanupDevice();
 	void Render();
+
 
 	D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
 	D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
