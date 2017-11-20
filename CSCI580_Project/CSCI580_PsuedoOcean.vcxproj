@@ -107,11 +107,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ID3D11Renderer.cpp" />
+    <ClCompile Include="ShaderTechnique.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ID3D11Renderer.h" />
+    <ClInclude Include="PreprocessorDefinitions.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ShaderTechnique.h" />
+    <ClInclude Include="SingletonMacros.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

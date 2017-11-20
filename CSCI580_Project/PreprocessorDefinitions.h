@@ -1,0 +1,21 @@
+/**
+* PreprocessorDefinitions.h
+*
+* This is the adaption of the d3d11 tutorial file.  This struct is representative of
+* the D3D11 Render Target.  All shaders must be compiled here and all geometry must be
+* sent here as well.
+*/
+#ifndef __PREPROCESSOR_DEFINITIONS_H__
+#define __PREPROCESSOR_DEFINITIONS_H__
+
+// Screen Definitions
+#define SCREENWIDTH 640
+#define SCREENHEIGHT 480
+
+// Shader Type Definitions
+#define VSPROFILE "vs_5.0"
+#define GSPROFILE "gs_5.0"
+#define PSPROFILE "ps_5.0"
+#define CSPROFILE "cs_5.0"
+
+#endif

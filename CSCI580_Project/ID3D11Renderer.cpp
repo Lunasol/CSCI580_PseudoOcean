@@ -1,4 +1,8 @@
 #include "ID3D11Renderer.h"
+#include "SingletonMacros.h"
+
+// Static Instance Pointer and Instance() Defintion Macro
+DEFINE_SINGLETON_INSTANCE(ID3D11Renderer);
 
 // Generic Constructors and Destructors
 ID3D11Renderer::ID3D11Renderer()
@@ -44,6 +48,7 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 	};
 	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
+	// Set up the swap chain
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferCount = 1;
@@ -60,9 +65,9 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 
 	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
 	{
-		g_driverType = driverTypes[driverTypeIndex];
-		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-			D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+		m_driverType = driverTypes[driverTypeIndex];
+		hr = D3D11CreateDeviceAndSwapChain(NULL, m_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+			D3D11_SDK_VERSION, &sd, &m_pSwapChain, &m_pDevice, &m_featureLevel, &m_pDeviceContext);
 		if (SUCCEEDED(hr))
 			break;
 	}
@@ -71,16 +76,16 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 
 	// Create a render target view
 	ID3D11Texture2D* pBackBuffer = NULL;
-	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 	if (FAILED(hr))
 		return hr;
 
-	hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
+	hr = m_pDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetsView);
 	pBackBuffer->Release();
 	if (FAILED(hr))
 		return hr;
 
-	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
+	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetsView, NULL);
 
 	// Setup the viewport
 	D3D11_VIEWPORT vp;
@@ -90,7 +95,7 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	g_pImmediateContext->RSSetViewports(1, &vp);
+	m_pDeviceContext->RSSetViewports(1, &vp);
 
 	return S_OK;
 }
@@ -109,8 +114,8 @@ void ID3D11Renderer::Render()
 {
 	// Just clear the backbuffer
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
-	g_pSwapChain->Present(0, 0);
+	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetsView, ClearColor);
+	m_pSwapChain->Present(0, 0);
 }
 
 
@@ -119,21 +124,42 @@ void ID3D11Renderer::Render()
 //--------------------------------------------------------------------------------------
 void ID3D11Renderer::CleanupDevice()
 {
-	if (g_pImmediateContext) g_pImmediateContext->ClearState();
+	if (m_pDeviceContext) m_pDeviceContext->ClearState();
 
-	if (g_pRenderTargetView) g_pRenderTargetView->Release();
-	if (g_pSwapChain) g_pSwapChain->Release();
-	if (g_pImmediateContext) g_pImmediateContext->Release();
-	if (g_pd3dDevice) g_pd3dDevice->Release();
+	if (m_pRenderTargetsView) m_pRenderTargetsView->Release();
+	if (m_pSwapChain) m_pSwapChain->Release();
+	if (m_pDeviceContext) m_pDeviceContext->Release();
+	if (m_pDevice) m_pDevice->Release();
 }
 
-HRESULT ID3D11Renderer::CompileShader(
+/**
+* HRESULT CompileShaderFromFile()
+*
+*
+* Compile any shader code for the program.
+*/
+HRESULT ID3D11Renderer::CompileShaderFromFile(
 	_In_ LPCWSTR srcFile,
 	_In_ LPCSTR entryPoint,
 	_In_ LPCSTR profile,
 	_Outptr_ ID3DBlob** blob
 )
 {
-	// TODO
-	return HRESULT();
+	return D3DX11CompileFromFile
+	(
+		srcFile,	// File to compile shader from
+		0,			// D3D10_SHADER_MACRO to be honest I have no idea what this does
+		0,			// LPD3D10INCLUDE Again no idea what this is for
+		entryPoint, // The starting function of the shader (ideally would be main)
+		profile,	// The profile for this shader
+		0,			// UINT Flags Another one I have no idea how to use.
+		0,			// More flags
+		0,			// ID3DX11ThreadPump I am guessing this has some control over wavefronts
+		blob,		// The blob that is to contain the compiled shader code
+		0,			// ID3D10Blob ErrorMessage this blob contains any errors
+		0			// HRESULT* stores the result of compiling the shader.
+	);
 }
+
+// Getters
+ID3D11Device *ID3D11Renderer::getDevicePtr() { return m_pDevice; }

@@ -17,6 +17,10 @@
 #include <d3dx11.h>
 #include "resource.h"
 
+// Preprocessor Includes
+#include "./PreprocessorDefinitions.h"
+
+// Renderer Includes
 #include "./ID3D11Renderer.h"
 
 
@@ -46,11 +50,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     if( FAILED( InitWindow( hInstance, nCmdShow ) ) )
         return 0;
 
-	ID3D11Renderer renderer = ID3D11Renderer();
+	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
 
-    if( FAILED( renderer.InitDevice(&g_hWnd) ) )
+    if( FAILED( pRenderer->InitDevice(&g_hWnd) ) )
     {
-        renderer.CleanupDevice();
+        pRenderer->CleanupDevice();
         return 0;
     }
 
@@ -65,11 +69,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
         else
         {
-            renderer.Render();
+            pRenderer->Render();
         }
     }
 
-    renderer.CleanupDevice();
+    pRenderer->CleanupDevice();
 
     return ( int )msg.wParam;
 }
@@ -98,7 +102,7 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow )
 
     // Create window
     g_hInst = hInstance;
-    RECT rc = { 0, 0, 640, 480 };
+    RECT rc = { 0, 0, SCREENWIDTH, SCREENHEIGHT };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
     g_hWnd = CreateWindow( 
 		L"GerstnerWaves",
