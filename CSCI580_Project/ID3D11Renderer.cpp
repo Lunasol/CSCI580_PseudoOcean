@@ -135,8 +135,7 @@ void ID3D11Renderer::CleanupDevice()
 /**
 * HRESULT CompileShaderFromFile()
 *
-*
-* Compile any shader code for the program.
+* Compile the passed shader into the Output blob
 */
 HRESULT ID3D11Renderer::CompileShaderFromFile(
 	_In_ LPCWSTR srcFile,
