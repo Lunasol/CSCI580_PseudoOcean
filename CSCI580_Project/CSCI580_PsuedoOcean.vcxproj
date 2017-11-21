@@ -108,6 +108,7 @@
   <ItemGroup>
     <ClCompile Include="ID3D11Renderer.cpp" />
     <ClCompile Include="ShaderTechnique.cpp" />
+    <ClCompile Include="VertexBufferGPU.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,8 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ShaderTechnique.h" />
     <ClInclude Include="SingletonMacros.h" />
+    <ClInclude Include="VertexBufferGPU.h" />
+    <ClInclude Include="VertexBufferLayout.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

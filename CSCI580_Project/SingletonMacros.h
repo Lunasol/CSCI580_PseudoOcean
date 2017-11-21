@@ -11,7 +11,7 @@
 *
 * Description:
 * Macro for easily defining the Singleton Instance() function.  The function
-* checks for an active pointer (ie an initialized singleton class) and returns
+* checks for an active pointer (ie an initialized singleton struct) and returns
 * if there is one or makes one and returns if there isn't.
 *
 * C++ Translation:

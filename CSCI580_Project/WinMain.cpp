@@ -80,11 +80,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
 
 //--------------------------------------------------------------------------------------
-// Register class and create window
+// Register struct and create window
 //--------------------------------------------------------------------------------------
 HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow )
 {
-    // Register class
+    // Register struct
 	WNDCLASSEX wcex = {0};
     wcex.cbSize = sizeof( WNDCLASSEX );
     wcex.style = CS_HREDRAW | CS_VREDRAW;

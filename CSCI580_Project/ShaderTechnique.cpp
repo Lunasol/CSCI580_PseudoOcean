@@ -1,7 +1,7 @@
 /**
 * ShaderTechnique.h
 *
-* This class is a container for compiled shader blobs.  It allows for simple
+* This struct is a container for compiled shader blobs.  It allows for simple
 * shader compilation and binding to the GPU pipeline.  Can contain several
 * shaders (VS, GS, PS, CS)!
 */

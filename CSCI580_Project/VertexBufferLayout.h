@@ -1,5 +1,9 @@
 #pragma once
 
+#include "ID3D11Renderer.h"
+
+#define EASYMALLOC(type, amount) ( type *) malloc(sizeof( type ) * amount )
+
 /**
 * enum VertexBufferLayouts
 *
@@ -32,4 +36,22 @@ enum VertexBufferLayouts {
 	VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3 = 0,
 	VertexFormatLayout_GSTerrain_P0f3_TC0f2_N0f3_R0i2,
 	VertexFormatLayout_Count
+};
+
+
+struct VertexBufferInputLayoutContainer {
+	VertexBufferInputLayoutContainer() {
+		m_inputLayoutInterfaces = EASYMALLOC(ID3D11InputLayout, VertexFormatLayout_Count);
+		//m_inputDescriptions = EASYMALLOC(D3D11_INPUT_ELEMENT_DESC*, VertexFormatLayout_Count);
+
+	
+	}
+
+	~VertexBufferInputLayoutContainer() {
+
+	}
+
+private:
+	ID3D11InputLayout *m_inputLayoutInterfaces;
+	//D3D11_INPUT_ELEMENT_DESC **m_inputDescriptions;
 };
