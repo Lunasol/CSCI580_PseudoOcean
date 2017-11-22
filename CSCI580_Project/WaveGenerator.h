@@ -36,6 +36,7 @@ class WaveGenerator
 	int xRes = -1;
 	int zRes = -1;
 
+	// universal constants
 	float g = 9.8f;
 	float pi = 3.14159265358979323846f;
 	
@@ -53,5 +54,5 @@ public:
 	~WaveGenerator();
 
 	void GenerateGrid(int vertexResolutionX, int vertexResolutionZ, float sizeX, float sizeZ);
-	const WaveVertex* GetWave() const;
+	const WaveVertex* GetWave();
 };
