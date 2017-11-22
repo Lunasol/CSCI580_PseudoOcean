@@ -19,6 +19,9 @@ WaveVertex *WaveGenerator::GenerateWaveList(
 	float sizeZ
 )
 {
+	if (m_pWaveVertices)
+		free(m_pWaveVertices);
+
 	m_pWaveVertices = EALLOC(WaveVertex, vertexResolutionX * vertexResolutionZ);
 
 	m_time = time(NULL);
