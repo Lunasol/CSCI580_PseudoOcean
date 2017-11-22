@@ -5,7 +5,6 @@
 * the D3D11 Render Target.  All shaders must be compiled here and all geometry must be
 * sent here as well.
 */
-
 #pragma once
 
 #include <windows.h>
