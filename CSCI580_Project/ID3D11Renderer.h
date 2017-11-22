@@ -5,13 +5,16 @@
 * the D3D11 Render Target.  All shaders must be compiled here and all geometry must be
 * sent here as well.
 */
-
 #pragma once
 
 #include <windows.h>
 #include <d3d11.h>
 #include <d3dx11.h>
+#include <d3dcompiler.h>
 #include "./Resource.h"
+
+#pragma comment (lib, "d3d11.lib") 
+#pragma comment (lib, "d3dx11.lib")
 
 // SINGLETON
 struct ID3D11Renderer
@@ -20,9 +23,9 @@ struct ID3D11Renderer
 
 	HRESULT InitDevice(HWND *g_hWnd);
 	HRESULT CompileShaderFromFile(
-		_In_ LPCWSTR srcFile, 
-		_In_ LPCSTR entryPoint, 
-		_In_ LPCSTR profile, 
+		_In_ LPCWSTR srcFile,
+		_In_ LPCSTR entryPoint,
+		_In_ LPCSTR profile,
 		_Outptr_ ID3DBlob** blob
 	);
 	void CleanupDevice();

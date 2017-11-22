@@ -18,4 +18,7 @@
 #define PSPROFILE "ps_5.0"
 #define CSPROFILE "cs_5.0"
 
+// Simplistic Functions As Macros
+#define EALLOC(type, amount) ( type *) malloc(sizeof( type ) * amount )
+
 #endif

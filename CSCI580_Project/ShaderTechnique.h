@@ -26,7 +26,7 @@ enum ShaderTechniqueMasks {
 
 union ShaderBitmask{
 	ShaderBitmask() { m_mask = 0; }
-	ShaderBitmask() {}
+	~ShaderBitmask() {}
 
 	__int16 m_mask;
 	char m_byteMask[2];
