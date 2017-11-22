@@ -29,6 +29,5 @@ struct WaveGenerator
 private:
 	WaveVertex *m_pWaveVertices;
 	float m_time;
-	float m_baseTime;
 };
 

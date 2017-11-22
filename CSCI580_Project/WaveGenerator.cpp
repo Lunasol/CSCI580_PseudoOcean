@@ -21,6 +21,8 @@ WaveVertex *WaveGenerator::GenerateWaveList(
 {
 	m_pWaveVertices = EALLOC(WaveVertex, vertexResolutionX * vertexResolutionZ);
 
+	m_time = time(NULL);
+
 	float xOffset, zOffset;
 	xOffset = sizeX / static_cast<float>(vertexResolutionX);
 	zOffset = sizeZ / static_cast<float>(vertexResolutionZ);
