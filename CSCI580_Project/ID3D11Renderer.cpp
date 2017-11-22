@@ -144,6 +144,7 @@ HRESULT ID3D11Renderer::CompileShaderFromFile(
 	_Outptr_ ID3DBlob** blob
 )
 {
+	//return D3DX11CompileFromFile
 	return D3DX11CompileFromFile
 	(
 		srcFile,	// File to compile shader from
