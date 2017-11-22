@@ -3,7 +3,7 @@
 WaveGenerator::WaveGenerator()
 {
 	m_pWaveVertices = nullptr;
-	m_time = 0.f;
+	m_time = time(NULL);
 }
 
 WaveGenerator::~WaveGenerator()
@@ -40,4 +40,10 @@ WaveVertex *WaveGenerator::GenerateWaveList(
 	}
 
 	return m_pWaveVertices;
+}
+
+float WaveGenerator::GetDeltaTime()
+{
+	m_time = time(NULL) - m_time;
+	return m_time;
 }

@@ -2,6 +2,7 @@
 
 // General Includes
 #include <stdlib.h>
+#include <time.h>
 
 #include "./PreprocessorDefinitions.h"
 
@@ -16,6 +17,8 @@ struct WaveGenerator
 	WaveGenerator();
 	~WaveGenerator();
 
+	float GetDeltaTime();
+
 	WaveVertex *GenerateWaveList(
 		int vertexResolutionX,
 		int vertexResolutionZ,
@@ -26,5 +29,6 @@ struct WaveGenerator
 private:
 	WaveVertex *m_pWaveVertices;
 	float m_time;
+	float m_baseTime;
 };
 
