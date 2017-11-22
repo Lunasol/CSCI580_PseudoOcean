@@ -38,4 +38,6 @@ WaveVertex *WaveGenerator::GenerateWaveList(
 			m_pWaveVertices[i * j + j].m_z = zValue;
 		}
 	}
+
+	return m_pWaveVertices;
 }
