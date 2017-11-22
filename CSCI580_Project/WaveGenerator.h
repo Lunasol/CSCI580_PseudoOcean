@@ -36,9 +36,10 @@ class WaveGenerator
 	int xRes = -1;
 	int zRes = -1;
 
-	// Wave properties
 	float g = 9.8f;
 	float pi = 3.14159265358979323846f;
+	
+	// Wave properties
 	float Q = 0.5f;
 	Float3 D = {0.9f, .0f, 0.2f};
 	float L = 100.141593f;
