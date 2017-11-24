@@ -10,12 +10,24 @@
 // Generic Constructor
 ShaderTechnique::ShaderTechnique()
 {
+	m_pVertexShader = nullptr;
+	m_pGeometryShader = nullptr;
+	m_pPixelShader = nullptr;
+	m_pComputeShader = nullptr;
 }
 
 // ShaderTechnique Destructor
 ShaderTechnique::~ShaderTechnique()
 {
 	// TODO
+	if (m_pVertexShader)
+		m_pVertexShader->Release();
+	if (m_pGeometryShader)
+		m_pGeometryShader->Release();
+	if (m_pPixelShader)
+		m_pPixelShader->Release();
+	if (m_pComputeShader)
+		m_pComputeShader->Release();
 }
 
 /**
@@ -50,6 +62,7 @@ HRESULT ShaderTechnique::LoadTechnique(
 			NULL, 
 			&m_pVertexShader
 		);
+		m_pVSBlob->Release();
 	}
 	if (gsSrcFile)
 	{
@@ -72,6 +85,7 @@ HRESULT ShaderTechnique::LoadTechnique(
 			NULL,
 			&m_pGeometryShader
 		);
+		m_pGSBlob->Release();
 	}
 	if (psSrcFile)
 	{
@@ -81,7 +95,7 @@ HRESULT ShaderTechnique::LoadTechnique(
 		);
 		m_bitMask.m_mask += ShaderTechniqueMasks::PS;
 		psResult = pRenderer->CompileShaderFromFile(
-			psSrcFile, psEntryPoint, VSPROFILE, &m_pVSBlob
+			psSrcFile, psEntryPoint, PSPROFILE, &m_pPSBlob
 		);
 		if (FAILED(psResult))
 		{
@@ -94,6 +108,7 @@ HRESULT ShaderTechnique::LoadTechnique(
 			NULL,
 			&m_pPixelShader
 		);
+		m_pPSBlob->Release();
 	}
 	if (csSrcFile)
 	{
@@ -103,7 +118,7 @@ HRESULT ShaderTechnique::LoadTechnique(
 		);
 		m_bitMask.m_mask += ShaderTechniqueMasks::CS;
 		csResult = pRenderer->CompileShaderFromFile(
-			gsSrcFile, gsEntryPoint, GSPROFILE, &m_pGSBlob
+			gsSrcFile, gsEntryPoint, CSPROFILE, &m_pCSBlob
 		);
 		if (FAILED(csResult))
 		{
@@ -116,6 +131,7 @@ HRESULT ShaderTechnique::LoadTechnique(
 			NULL,
 			&m_pComputeShader
 		);
+		m_pCSBlob->Release();
 	}
 
 	//return finalResult;

@@ -59,15 +59,13 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     }
 
 	// Initialize default shader techniques
-	{
-		ShaderTechnique debugTech = ShaderTechnique();
-		debugTech.LoadTechnique(
-			L"./GPUPrograms/DebugShader_VS.hlsl", "main",
-			nullptr, nullptr,
-			L"./GPUPrograms/DebugShader_PS.hlsl", "main",
-			nullptr, nullptr
-		);
-	}
+	ShaderTechnique debugTech = ShaderTechnique();
+	debugTech.LoadTechnique(
+		L"./GPUPrograms/DebugShader_VS.hlsl", "main",
+		nullptr, nullptr,
+		L"./GPUPrograms/DebugShader_PS.hlsl", "main",
+		nullptr, nullptr
+	);
 
     // Main message loop
     MSG msg = {0};
