@@ -27,8 +27,8 @@
 //--------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------
-HINSTANCE               g_hInst = NULL;
-HWND                    g_hWnd = NULL;
+HINSTANCE               g_hInst = nullptr;
+HWND                    g_hWnd = nullptr;
 
 
 //--------------------------------------------------------------------------------------
@@ -58,11 +58,22 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         return 0;
     }
 
+	// Initialize default shader techniques
+	{
+		ShaderTechnique debugTech = ShaderTechnique();
+		debugTech.LoadTechnique(
+			L"./GPUPrograms/DebugShader_VS.hlsl", "main",
+			nullptr, nullptr,
+			L"./GPUPrograms/DebugShader_PS.hlsl", "main",
+			nullptr, nullptr
+		);
+	}
+
     // Main message loop
     MSG msg = {0};
     while( WM_QUIT != msg.message )
     {
-        if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+        if( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
@@ -93,9 +104,9 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow )
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
     //wcex.hIcon = LoadIcon( hInstance, ( LPCTSTR )IDI_TUTORIAL1 );
-    wcex.hCursor = LoadCursor( NULL, IDC_ARROW );
+    wcex.hCursor = LoadCursor( nullptr, IDC_ARROW );
     wcex.hbrBackground = ( HBRUSH )( COLOR_WINDOW + 1 );
-   // wcex.lpszMenuName = NULL;
+   // wcex.lpszMenuName = nullptr;
 	wcex.lpszClassName = L"GerstnerWaves";
     if( !RegisterClassEx( &wcex ) )
         return E_FAIL;
@@ -112,10 +123,10 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow )
 		CW_USEDEFAULT, 
 		rc.right - rc.left, 
 		rc.bottom - rc.top, 
-		NULL, 
-		NULL, 
+		nullptr, 
+		nullptr, 
 		hInstance,
-        NULL );
+        nullptr );
     if( !g_hWnd )
         return E_FAIL;
 

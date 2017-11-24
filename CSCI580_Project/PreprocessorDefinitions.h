@@ -13,10 +13,10 @@
 #define SCREENHEIGHT 480
 
 // Shader Type Definitions
-#define VSPROFILE "vs_5.0"
-#define GSPROFILE "gs_5.0"
-#define PSPROFILE "ps_5.0"
-#define CSPROFILE "cs_5.0"
+#define VSPROFILE "vs_5_0"
+#define GSPROFILE "gs_5_0"
+#define PSPROFILE "ps_5_0"
+#define CSPROFILE "cs_5_0"
 
 // Simplistic Functions As Macros
 #define EALLOC(type, amount) ( type *) malloc(sizeof( type ) * amount )

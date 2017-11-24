@@ -32,7 +32,6 @@ HRESULT ShaderTechnique::LoadTechnique(
 	ID3DBlob *m_pVSBlob, *m_pGSBlob, *m_pPSBlob, *m_pCSBlob;
 	m_pVSBlob = m_pGSBlob = m_pPSBlob = m_pCSBlob = NULL;
 
-
 	// Compile the given shader files
 	if (vsSrcFile) 
 	{

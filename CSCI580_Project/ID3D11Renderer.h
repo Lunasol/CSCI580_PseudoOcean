@@ -13,6 +13,10 @@
 #include <d3dcompiler.h>
 #include "./Resource.h"
 
+// Renderer Stuff
+#include "./VertexBufferGPU.h"
+#include "./VertexBufferLayout.h"
+
 #pragma comment (lib, "d3d11.lib") 
 #pragma comment (lib, "d3dx11.lib")
 
@@ -32,16 +36,17 @@ struct ID3D11Renderer
 	void Render();
 
 	ID3D11Device * getDevicePtr();
+	ID3D11DeviceContext * getDeviceContextPtr();
 
 private:
 	static ID3D11Renderer *m_pInstance;
 
 	D3D_DRIVER_TYPE         m_driverType = D3D_DRIVER_TYPE_NULL;
 	D3D_FEATURE_LEVEL       m_featureLevel = D3D_FEATURE_LEVEL_11_0;
-	ID3D11Device*           m_pDevice = NULL;
-	ID3D11DeviceContext*    m_pDeviceContext = NULL;
-	IDXGISwapChain*         m_pSwapChain = NULL;
-	ID3D11RenderTargetView* m_pRenderTargetsView = NULL;
+	ID3D11Device*           m_pDevice = nullptr;
+	ID3D11DeviceContext*    m_pDeviceContext = nullptr;
+	IDXGISwapChain*         m_pSwapChain = nullptr;
+	ID3D11RenderTargetView* m_pRenderTargetsView = nullptr;
 
 	// Private Constructor and Destructor
 	ID3D11Renderer();

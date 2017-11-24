@@ -16,7 +16,7 @@
 *
 * C++ Translation:
 *
-* name *name::m_pInstance = NULL;
+* name *name::m_pInstance = nullptr;
 * name *name::Instance()
 * {
 *      if(!m_pIntance)
@@ -26,7 +26,7 @@
 *
 */
 #define DEFINE_SINGLETON_INSTANCE(name) \
-	name *##name##::m_pInstance = NULL;    \
+	name *##name##::m_pInstance = nullptr;    \
     name *##name## ::Instance()         \
     {                                   \
         if (!m_pInstance)               \

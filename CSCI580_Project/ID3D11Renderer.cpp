@@ -144,8 +144,9 @@ HRESULT ID3D11Renderer::CompileShaderFromFile(
 	_Outptr_ ID3DBlob** blob
 )
 {
-	//return D3DX11CompileFromFile
-	return D3DX11CompileFromFile
+	ID3DBlob* errorBlob = nullptr;
+
+	HRESULT res = D3DX11CompileFromFile
 	(
 		srcFile,	// File to compile shader from
 		0,			// D3D10_SHADER_MACRO to be honest I have no idea what this does
@@ -156,10 +157,22 @@ HRESULT ID3D11Renderer::CompileShaderFromFile(
 		0,			// More flags
 		0,			// ID3DX11ThreadPump I am guessing this has some control over wavefronts
 		blob,		// The blob that is to contain the compiled shader code
-		0,			// ID3D10Blob ErrorMessage this blob contains any errors
+		&errorBlob,	// ID3D10Blob ErrorMessage this blob contains any errors
 		0			// HRESULT* stores the result of compiling the shader.
 	);
+	if (FAILED(res))
+	{
+		OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+		errorBlob->Release();
+	}
+
+	return res;
 }
 
 // Getters
 ID3D11Device *ID3D11Renderer::getDevicePtr() { return m_pDevice; }
+
+ID3D11DeviceContext * ID3D11Renderer::getDeviceContextPtr()
+{
+	return m_pDeviceContext;
+}

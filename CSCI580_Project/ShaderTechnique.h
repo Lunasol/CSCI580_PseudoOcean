@@ -37,7 +37,7 @@ struct ShaderTechnique
 	ShaderTechnique();
 	~ShaderTechnique();
 
-	static void BindTechnique(ShaderTechnique *tech);
+	//static void BindTechnique(ShaderTechnique *tech);
 	
 	HRESULT LoadTechnique(
 		_In_ LPCWSTR vsSrcFile, _In_ LPCSTR vsEntryPoint,

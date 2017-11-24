@@ -3,7 +3,7 @@
 WaveGenerator::WaveGenerator()
 {
 	m_pWaveVertices = nullptr;
-	m_time = time(NULL);
+	m_time = time(nullptr);
 }
 
 WaveGenerator::~WaveGenerator()
@@ -24,7 +24,7 @@ WaveVertex *WaveGenerator::GenerateWaveList(
 
 	m_pWaveVertices = EALLOC(WaveVertex, vertexResolutionX * vertexResolutionZ);
 
-	m_time = time(NULL);
+	m_time = time(nullptr);
 
 	float xOffset, zOffset;
 	xOffset = sizeX / static_cast<float>(vertexResolutionX);
@@ -49,6 +49,6 @@ WaveVertex *WaveGenerator::GenerateWaveList(
 
 float WaveGenerator::GetDeltaTime()
 {
-	m_time = time(NULL) - m_time;
+	m_time = time(nullptr) - m_time;
 	return m_time;
 }
