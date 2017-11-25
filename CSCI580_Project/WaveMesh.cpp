@@ -34,5 +34,14 @@ WaveMesh::~WaveMesh()
 ///////////////////////////////////////////////////////
 void WaveMesh::Draw()
 {
-	// TODO
+	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
+	unsigned int stride = sizeof(WaveVertex);
+	unsigned int offset = 0;
+
+	// Set shaders
+	m_ShaderTech.BindTechnique();
+
+	pRenderer->getDeviceContextPtr()->IAGetVertexBuffers(0, 1, m_VertexBuffer.getVertexBuffer(), &stride, &offset);
+	pRenderer->getDeviceContextPtr()->IASetIndexBuffer(m_VertexBuffer.getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	pRenderer->getDeviceContextPtr()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

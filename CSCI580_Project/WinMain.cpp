@@ -69,7 +69,6 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 		nullptr, nullptr,
 		VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3
 	);
-	VertexBufferGPU vertBufGPU = VertexBufferGPU();
 	//vertBufGPU.InitBuffer<WaveVertex>(1, 18, 6, 3);
 
     // Main message loop
