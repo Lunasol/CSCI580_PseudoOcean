@@ -37,18 +37,12 @@ struct ShaderTechnique
 	ShaderTechnique();
 	~ShaderTechnique();
 
+
 	HRESULT LoadTechnique(LPCWSTR vsSrcFile, LPCSTR vsEntryPoint, LPCWSTR gsSrcFile, LPCSTR gsEntryPoint, LPCWSTR psSrcFile, LPCSTR psEntryPoint, LPCWSTR csSrcFile, LPCSTR csEntryPoint, int vertexBufType);
 
-	void GenerateInputLayout(int inputLayout, D3D11_INPUT_ELEMENT_DESC *elementDescs);
+	void BindTechnique();
 
-	////static void BindTechnique(ShaderTechnique *tech);
-	//
-	//HRESULT LoadTechnique(
-	//	_In_ LPCWSTR vsSrcFile, _In_ LPCSTR vsEntryPoint,
-	//	_In_ LPCWSTR gsSrcFile, _In_ LPCSTR gsEntryPoint,
-	//	_In_ LPCWSTR psSrcFile, _In_ LPCSTR psEntryPoint,
-	//	_In_ LPCWSTR csSrcFile, _In_ LPCSTR csEntryPoint
-	//);
+	void GenerateInputLayout(int inputLayout, int shaderType, D3D11_INPUT_ELEMENT_DESC * elementDescs);
 
 private:
 	ShaderBitmask m_bitMask;
@@ -58,5 +52,7 @@ private:
 	ID3D11GeometryShader *m_pGeometryShader;
 	ID3D11PixelShader *m_pPixelShader;
 	ID3D11ComputeShader *m_pComputeShader;
+
+	ID3D11InputLayout *m_pVLayout, *m_pGLayout, *m_pCLayout;
 };
 

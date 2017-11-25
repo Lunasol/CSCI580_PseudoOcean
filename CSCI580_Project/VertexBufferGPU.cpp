@@ -46,12 +46,10 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xIndexCo
 		vertices = EALLOC(WaveVertex, vertexCount);
 	}
 	
-
 	switch (bufferLayout)
 	{
 		case VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3:
 		{
-			// TODO
 			if (xIndexCount * yIndexCount > 0)
 			{
 				indices = EALLOC(unsigned long, numIndices);
@@ -112,7 +110,7 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xIndexCo
 
 			break;
 		}
-	
+
 	}
 	if (vertices)
 		free(vertices);
