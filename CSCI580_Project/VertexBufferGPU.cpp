@@ -74,9 +74,9 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexC
 		vBufferDesc.MiscFlags = 0;
 		vBufferDesc.StructureByteStride = 0;
 
-		//vertexData.pSysMem = ;// passed in vertices
-		//vertexData.SysMemPitch = 0;
-		//vertexData.SysMemSlicePitch = 0;
+		vertexData.pSysMem = vertices;// passed in vertices
+		vertexData.SysMemPitch = 0;
+		vertexData.SysMemSlicePitch = 0;
 
 		result = ID3D11Renderer::Instance()->getDevicePtr()->CreateBuffer(&vBufferDesc, &vertexData, &m_pVBuffer);
 		if (FAILED(result))
@@ -89,9 +89,9 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexC
 		iBufferDesc.MiscFlags = 0;
 		iBufferDesc.StructureByteStride = 0;
 
-		//indexData.pSysMem = ;// passed in vertices
-		//indexData.SysMemPitch = 0;
-		//indexData.SysMemSlicePitch = 0;
+		indexData.pSysMem = indices;// passed in vertices
+		indexData.SysMemPitch = 0;
+		indexData.SysMemSlicePitch = 0;
 
 		result = ID3D11Renderer::Instance()->getDevicePtr()->CreateBuffer(&iBufferDesc, &indexData, &m_pIBuffer);
 		if (FAILED(result))
