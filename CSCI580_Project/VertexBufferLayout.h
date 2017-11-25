@@ -14,7 +14,7 @@
 * VertexFormatLayout_Name_B0__P0f3_TC0f2_N0f3
 *
 * Where:
-* Name- The name of the Mesh or technique that utilizes this format
+* Name- The name of the WaveMesh or technique that utilizes this format
 * B# - Buffer number (B0 = Buffer 0) since we can have multiple buffers for one shader
 * P# - Position number (P0 = POSITION:0)
 * C# - Can't remember why I put this here but I am leaving it
@@ -39,37 +39,3 @@ enum VertexBufferLayouts {
 	VertexFormatLayout_TestVertices_B0_P0f3_C0f4,
 	VertexFormatLayout_Count
 };
-
-
-//struct VertexBufferInputLayoutContainer {
-//	VertexBufferInputLayoutContainer() 
-//	{
-//		
-//	}
-//
-//	~VertexBufferInputLayoutContainer() 
-//	{
-//
-//	}
-//
-//	/*D3D11_INPUT_ELEMENT_DESC* CreateInputLayout(int type, ShaderTechnique *technique)
-//	{
-//		if (m_pInputElementDesc)
-//			free(m_pInputElementDesc);
-//		
-//		switch (type) {
-//		case VertexFormatLayout_TestVertices_B0_P0f3_C0f4:
-//			m_pInputElementDesc = EALLOC(D3D11_INPUT_ELEMENT_DESC, 2);
-//			m_pInputElementDesc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-//			m_pInputElementDesc[1] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-//
-//			break;
-//		}
-//
-//		return m_pInputElementDesc;
-//	}*/
-//
-//private:
-//	//ID3D11InputLayout *m_inputLayoutInterfaces;
-//	D3D11_INPUT_ELEMENT_DESC *m_pInputElementDesc;
-//};

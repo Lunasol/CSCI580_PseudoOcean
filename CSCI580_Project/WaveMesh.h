@@ -1,5 +1,5 @@
 /**
-* Mesh
+* WaveMesh
 *
 * Description
 * This is the final Graphics object.  We created a shader technique,
@@ -13,13 +13,16 @@
 #include "./ShaderTechnique.h"
 #include "./VertexBufferLayout.h"
 #include "./VertexBufferGPU.h"
+#include "./WaveGenerator.h"
 
-struct Mesh
+struct WaveMesh
 {
-	Mesh();
-	~Mesh();
+	WaveMesh();
+	~WaveMesh();
 
 	// Member Methods
+	void InitWaveMesh(int numVerts, int xVertexCount, int yVertexCount, WaveVertex * verts);
+
 	void Draw();
 
 private:

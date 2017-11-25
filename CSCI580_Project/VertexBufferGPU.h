@@ -5,13 +5,20 @@
 
 // Vertex Buffer Includes
 #include "VertexBufferLayout.h"
+#include "WaveGenerator.h"
 
 struct VertexBufferGPU
 {
 	VertexBufferGPU();
 	~VertexBufferGPU();
 
-	void InitBuffer(int bufferLayout, int vertexCount, int xIndexCount, int yIndexCount);
+	void InitBuffer(
+		int bufferLayout,
+		int vertexCount,
+		int xVertexCount,
+		int yVertexCount,
+		WaveVertex *vertices
+	);
 
 private:
 	int m_layout;

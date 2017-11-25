@@ -42,9 +42,10 @@ struct ShaderTechnique
 
 	void BindTechnique();
 
+private:
+
 	void GenerateInputLayout(int inputLayout, int shaderType, D3D11_INPUT_ELEMENT_DESC * elementDescs);
 
-private:
 	ShaderBitmask m_bitMask;
 
 	// The shader pointers in this technique

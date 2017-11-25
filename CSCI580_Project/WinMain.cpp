@@ -23,6 +23,7 @@
 // Renderer Includes
 #include "./ID3D11Renderer.h"
 #include "./VertexBufferGPU.h"
+#include "./WaveMesh.h"
 
 
 //--------------------------------------------------------------------------------------
@@ -65,10 +66,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 		L"./GPUPrograms/DebugShader_VS.hlsl", "main",
 		nullptr, nullptr,
 		L"./GPUPrograms/DebugShader_PS.hlsl", "main",
-		nullptr, nullptr
+		nullptr, nullptr,
+		VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3
 	);
 	VertexBufferGPU vertBufGPU = VertexBufferGPU();
-	vertBufGPU.InitBuffer(1, 18, 6, 3);
+	//vertBufGPU.InitBuffer<WaveVertex>(1, 18, 6, 3);
 
     // Main message loop
     MSG msg = {0};

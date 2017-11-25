@@ -52,7 +52,8 @@ ShaderTechnique::~ShaderTechnique()
 * BindTechnique()
 *
 * Description:
-* Bind this technique's shaders.
+* Bind this technique's shaders.  Very simplified form since we don't have
+* any additional shaders.
 */
 void ShaderTechnique::BindTechnique()
 {
@@ -114,6 +115,8 @@ HRESULT ShaderTechnique::LoadTechnique(
 			m_pVSBlob->GetBufferSize(), 
 			&m_pVLayout
 		);
+		if (FAILED(vsResult))
+			exit(EXIT_FAILURE);
 		free(inputLayout);
 
 		m_pVSBlob->Release();
