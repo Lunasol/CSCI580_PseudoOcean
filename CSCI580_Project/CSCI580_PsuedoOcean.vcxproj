@@ -119,6 +119,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="VertexStructs.h" />
     <ClInclude Include="ID3D11Renderer.h" />
     <ClInclude Include="PreprocessorDefinitions.h" />
     <ClInclude Include="Resource.h" />

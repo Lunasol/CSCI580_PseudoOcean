@@ -22,6 +22,7 @@
 
 // Renderer Includes
 #include "./ID3D11Renderer.h"
+#include "./VertexBufferGPU.h"
 
 
 //--------------------------------------------------------------------------------------
@@ -66,6 +67,8 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 		L"./GPUPrograms/DebugShader_PS.hlsl", "main",
 		nullptr, nullptr
 	);
+	VertexBufferGPU vertBufGPU = VertexBufferGPU();
+	vertBufGPU.InitBuffer(1, 18, 6, 3);
 
     // Main message loop
     MSG msg = {0};

@@ -23,6 +23,14 @@ struct WaveVertex
 
 class WaveGenerator
 {
+public:
+	WaveGenerator();
+	~WaveGenerator();
+
+	void GenerateGrid(int vertexResolutionX, int vertexResolutionZ, float sizeX, float sizeZ);
+	const WaveVertex* GetWave();
+
+private:
 	Float3* m_pGridVertices;
 	WaveVertex* m_pWaveVertices;
 	double m_time;
@@ -39,20 +47,13 @@ class WaveGenerator
 	// universal constants
 	float g = 9.8f;
 	float pi = 3.14159265358979323846f;
-	
+
 	// Wave properties
 	float Q = 0.5f;
-	Float3 D = {0.9f, .0f, 0.2f};
+	Float3 D = { 0.9f, .0f, 0.2f };
 	float L = 100.141593f;
 	float A = 0.905f;
 	float W = 10.28f;
 	float S = 1.f;
 	float phi = 5;
-
-public:
-	WaveGenerator();
-	~WaveGenerator();
-
-	void GenerateGrid(int vertexResolutionX, int vertexResolutionZ, float sizeX, float sizeZ);
-	const WaveVertex* GetWave();
 };

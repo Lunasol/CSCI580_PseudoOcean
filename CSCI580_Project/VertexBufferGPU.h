@@ -11,10 +11,11 @@ struct VertexBufferGPU
 	VertexBufferGPU();
 	~VertexBufferGPU();
 
-	void InitBuffer(int bufferFormat);
+	void InitBuffer(int bufferLayout, int vertexCount, int xIndexCount, int yIndexCount);
 
 private:
 	int m_layout;
-	ID3D11Buffer *m_pVBuffer;
+	unsigned long m_numVerts, m_numIndices;
+	ID3D11Buffer *m_pVBuffer, *m_pIBuffer;
 };
 

@@ -3,8 +3,6 @@
 #include "ID3D11Renderer.h"
 #include "./ShaderTechnique.h"
 
-#define EALLOC(type, amount) ( type *) malloc(sizeof( type ) * amount )
-
 /**
 * enum VertexBufferLayouts
 *
@@ -35,6 +33,7 @@
 enum VertexBufferLayouts {
 	// Terrain VertexBufferLayouts
 	VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3 = 0,
+	//VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3,
 	VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3,
 	VertexFormatLayout_GSTerrain_P0f3_TC0f2_N0f3_R0i2,
 	VertexFormatLayout_TestVertices_B0_P0f3_C0f4,
@@ -42,35 +41,35 @@ enum VertexBufferLayouts {
 };
 
 
-struct VertexBufferInputLayoutContainer {
-	VertexBufferInputLayoutContainer() 
-	{
-	
-	}
-
-	~VertexBufferInputLayoutContainer() 
-	{
-
-	}
-
-	/*D3D11_INPUT_ELEMENT_DESC* CreateInputLayout(int type, ShaderTechnique *technique)
-	{
-		if (m_pInputElementDesc)
-			free(m_pInputElementDesc);
-		
-		switch (type) {
-		case VertexFormatLayout_TestVertices_B0_P0f3_C0f4:
-			m_pInputElementDesc = EALLOC(D3D11_INPUT_ELEMENT_DESC, 2);
-			m_pInputElementDesc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-			m_pInputElementDesc[1] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-
-			break;
-		}
-
-		return m_pInputElementDesc;
-	}*/
-
-private:
-	//ID3D11InputLayout *m_inputLayoutInterfaces;
-	D3D11_INPUT_ELEMENT_DESC *m_pInputElementDesc;
-};
+//struct VertexBufferInputLayoutContainer {
+//	VertexBufferInputLayoutContainer() 
+//	{
+//		
+//	}
+//
+//	~VertexBufferInputLayoutContainer() 
+//	{
+//
+//	}
+//
+//	/*D3D11_INPUT_ELEMENT_DESC* CreateInputLayout(int type, ShaderTechnique *technique)
+//	{
+//		if (m_pInputElementDesc)
+//			free(m_pInputElementDesc);
+//		
+//		switch (type) {
+//		case VertexFormatLayout_TestVertices_B0_P0f3_C0f4:
+//			m_pInputElementDesc = EALLOC(D3D11_INPUT_ELEMENT_DESC, 2);
+//			m_pInputElementDesc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+//			m_pInputElementDesc[1] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+//
+//			break;
+//		}
+//
+//		return m_pInputElementDesc;
+//	}*/
+//
+//private:
+//	//ID3D11InputLayout *m_inputLayoutInterfaces;
+//	D3D11_INPUT_ELEMENT_DESC *m_pInputElementDesc;
+//};
