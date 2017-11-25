@@ -6,19 +6,37 @@
 #include <math.h>
 
 #include "./PreprocessorDefinitions.h"
+#include <complex>
 
 #define INDEX i * j + j
 
 struct Float3
 {
-	float x;
-	float y;
-	float z;
+	float x, y, z;
 };
 
 struct WaveVertex
 {
-	Float3 Position, Normal;
+	Float3 position, normal;
+};
+
+struct WaveGenVertex
+{
+	WaveVertex waveVertex;
+	Float3 a, b, c; // htilde0
+	Float3 _a, _b, _c; // htilde0mk conjugate
+	Float3 ox, oy, oz; // original position
+};
+
+struct Complex
+{
+	float r, i;
+};
+
+struct ComplexVectorNormal
+{
+	Complex h;
+	Float3 D, n;
 };
 
 class WaveGenerator
@@ -47,10 +65,16 @@ class WaveGenerator
 	float S = 1.f;
 	float phi = 5;
 
+
+
+
 public:
 	WaveGenerator();
 	~WaveGenerator();
 
 	void GenerateGrid(int vertexResolutionX, int vertexResolutionZ, float sizeX, float sizeZ);
 	const WaveVertex* GetWave() const;
+
+	// New wave
+	const WaveVertex* GetWaves2() const;
 };

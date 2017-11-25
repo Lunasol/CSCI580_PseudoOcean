@@ -41,9 +41,9 @@ void WaveGenerator::GenerateGrid(int vertexResolutionX, int vertexResolutionZ, f
 		zValue = (zOffset * i);
 		for (int j = 0; j < vertexResolutionX; j++)
 		{
-			m_pGridVertices[INDEX].m_x = m_pWaveVertices[INDEX].Position.m_x = xValue += xOffset;
-			m_pGridVertices[INDEX].m_y = m_pWaveVertices[INDEX].Position.m_y = 0.f;
-			m_pGridVertices[INDEX].m_z = m_pWaveVertices[INDEX].Position.m_z = zValue;
+			m_pGridVertices[INDEX].x = m_pWaveVertices[INDEX].position.x = xValue += xOffset;
+			m_pGridVertices[INDEX].y = m_pWaveVertices[INDEX].position.y = 0.f;
+			m_pGridVertices[INDEX].z = m_pWaveVertices[INDEX].position.z = zValue;
 		}
 	}
 }
