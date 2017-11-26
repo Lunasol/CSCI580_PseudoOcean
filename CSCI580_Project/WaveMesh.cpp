@@ -14,13 +14,14 @@ void WaveMesh::InitWaveMesh(int numVerts, int xVertexCount, int yVertexCount, Wa
 		yVertexCount,
 		verts
 	);
-	//m_ShaderTech.LoadTechnique(
-	//	VSNAME, main,
-	//	nullptr, nullptr,
-	//	PSNAME, main,
-	//	nullptr, nullptr,
-	//	VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3
-	//);
+	// Test shader
+	m_ShaderTech.LoadTechnique(
+		L"Wave_DebugShader_VS.hlsl", "main",
+		nullptr, nullptr,
+		L"Wave_DebugShader_PS.hlsl", "main",
+		nullptr, nullptr,
+		VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3
+	);
 }
 
 

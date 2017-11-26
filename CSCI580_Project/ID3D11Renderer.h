@@ -48,6 +48,8 @@ private:
 	IDXGISwapChain*         m_pSwapChain = nullptr;
 	ID3D11RenderTargetView* m_pRenderTargetsView = nullptr;
 
+	VertexBufferGPU			m_ConstantBuffer;
+
 	// Private Constructor and Destructor
 	ID3D11Renderer();
 	~ID3D11Renderer();

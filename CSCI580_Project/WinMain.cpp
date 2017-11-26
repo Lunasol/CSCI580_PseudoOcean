@@ -61,14 +61,14 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     }
 
 	// Initialize default shader techniques
-	ShaderTechnique debugTech = ShaderTechnique();
+	/*ShaderTechnique debugTech = ShaderTechnique();
 	debugTech.LoadTechnique(
 		L"./GPUPrograms/DebugShader_VS.hlsl", "main",
 		nullptr, nullptr,
 		L"./GPUPrograms/DebugShader_PS.hlsl", "main",
 		nullptr, nullptr,
 		VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3
-	);
+	);*/
 	//vertBufGPU.InitBuffer<WaveVertex>(1, 18, 6, 3);
 
     // Main message loop

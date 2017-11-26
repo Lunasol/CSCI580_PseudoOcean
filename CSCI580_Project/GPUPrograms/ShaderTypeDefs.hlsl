@@ -16,6 +16,21 @@ struct DEBUGGING_PS_IN
 	float4 position : SV_Position;
 	float4 color : COLOR;
 };
+
+// Wave Debugging
+struct WAVE_DEBUGGING_VS_IN
+{
+	float4 iPosL : POSITION;
+	float3 iNormL : NORMAL;
+	float4 iVertColor : COLOR;
+}
+
+struct WAVE_DEBUGGING_PS_IN
+{
+	float4 iPos : SV_Position;
+	float4 iNorm : NORMAL;
+	float4 iVertColor : COLOR;
+}
 // End Debugging 
 
 #endif

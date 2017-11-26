@@ -17,8 +17,19 @@ VertexBufferGPU::VertexBufferGPU()
 
 VertexBufferGPU::~VertexBufferGPU() 
 {	
+	if (m_pVBuffer)
+		m_pVBuffer->Release();
+	if (m_pIBuffer)
+		m_pIBuffer->Release();
 }
 
+/**
+* InitBufferInitBuffer(int bufferLayout, int vertexCount, int xVertexCount, int yVertexCount, WaveVertex * vertices)
+*
+* Description
+* Initialize the VertexBufferGPU by taking in the layout, vertex count, vertexCount in the x and y direction
+* and the waveVertex vertices.  Generates the index buffer to make a series of quads.
+*/
 void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexCount, int yVertexCount, WaveVertex * vertices)
 {
 	unsigned long *indices;
@@ -104,5 +115,6 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexC
 		free(indices);
 }
 
+// BufferPointer Getters
 ID3D11Buffer **VertexBufferGPU::getVertexBuffer() { return &m_pVBuffer; }
 ID3D11Buffer *VertexBufferGPU::getIndexBuffer() { return m_pIBuffer; }

@@ -113,7 +113,7 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 void ID3D11Renderer::Render()
 {
 	// Just clear the backbuffer
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
+	float ClearColor[4] = { 0.3f, 0.3f, 0.3f, 1.0f }; //red,green,blue,alpha
 	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetsView, ClearColor);
 	m_pSwapChain->Present(0, 0);
 }
