@@ -128,6 +128,9 @@
     <ClInclude Include="VertexBufferLayout.h" />
     <ClInclude Include="WaveGenerator.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader.fx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
