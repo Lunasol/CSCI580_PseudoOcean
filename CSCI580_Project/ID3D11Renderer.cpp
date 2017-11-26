@@ -98,6 +98,28 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 	m_pDeviceContext->RSSetViewports(1, &vp);
 
 	// Init Constant buffer
+	VS_CONSTANT_BUFFER vsConstBufferData;
+	PS_CONSTANT_BUFFER psConstBufferData;
+
+	// Create buffer description
+	D3D11_BUFFER_DESC vsCBufferDesc;
+	vsCBufferDesc.ByteWidth = sizeof(VS_CONSTANT_BUFFER);
+	vsCBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	vsCBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	vsCBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	vsCBufferDesc.MiscFlags = 0;
+	vsCBufferDesc.StructureByteStride = 0;
+
+	D3D11_BUFFER_DESC psCBufferDesc;
+	psCBufferDesc.ByteWidth = sizeof(PS_CONSTANT_BUFFER);
+	psCBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	psCBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	psCBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	psCBufferDesc.MiscFlags = 0;
+	psCBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA initData;
+
 
 	return S_OK;
 }

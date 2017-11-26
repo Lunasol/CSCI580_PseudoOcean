@@ -20,6 +20,28 @@
 #pragma comment (lib, "d3d11.lib") 
 #pragma comment (lib, "d3dx11.lib")
 
+// Constant Buffer Struct
+struct VS_CONSTANT_BUFFER
+{
+	float m_WorldViewProjMat[16];
+	float m_time; // If needed
+};
+
+struct PS_CONSTANT_BUFFER_MEMBER
+{
+	FLOAT g_LightPos[4]; // The Last Element of 
+	FLOAT g_LightDir[4];
+	FLOAT g_LightColor[4];
+};
+
+// This is a union that allows you to pack variables either defined or individually
+union PS_CONSTANT_BUFFER
+{
+	PS_CONSTANT_BUFFER_MEMBER m_variables;
+	float g_floats[12];
+};
+
+// Renderer
 // SINGLETON
 struct ID3D11Renderer
 {
@@ -33,6 +55,7 @@ struct ID3D11Renderer
 		_Outptr_ ID3DBlob** blob
 	);
 	void CleanupDevice();
+	void UpdateConstantBuffer();
 	void Render();
 
 	ID3D11Device * getDevicePtr();
@@ -48,7 +71,10 @@ private:
 	IDXGISwapChain*         m_pSwapChain = nullptr;
 	ID3D11RenderTargetView* m_pRenderTargetsView = nullptr;
 
-	VertexBufferGPU			m_ConstantBuffer;
+	ID3D11Buffer			*m_VSConstantBuffer;
+	ID3D11Buffer			*m_GSConstantBuffer;
+	ID3D11Buffer			*m_PSConstantBuffer;
+	ID3D11Buffer			*m_CSConstantBuffer;
 
 	// Private Constructor and Destructor
 	ID3D11Renderer();
