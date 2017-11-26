@@ -32,6 +32,8 @@ struct PS_CONSTANT_BUFFER_MEMBER
 	FLOAT g_LightPos[4]; // The Last Element of 
 	FLOAT g_LightDir[4];
 	FLOAT g_LightColor[4];
+	FLOAT g_LightTerms[4]; // Using 4 floats makes this aligned
+	// KD, KS, KA, Packing
 };
 
 // This is a union that allows you to pack variables either defined or individually
