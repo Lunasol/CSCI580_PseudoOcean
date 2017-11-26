@@ -97,6 +97,8 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 	vp.TopLeftY = 0;
 	m_pDeviceContext->RSSetViewports(1, &vp);
 
+	// Init Constant buffer
+
 	return S_OK;
 }
 
