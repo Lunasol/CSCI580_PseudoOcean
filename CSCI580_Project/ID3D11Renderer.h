@@ -73,10 +73,10 @@ private:
 	IDXGISwapChain*         m_pSwapChain = nullptr;
 	ID3D11RenderTargetView* m_pRenderTargetsView = nullptr;
 
-	ID3D11Buffer			*m_VSConstantBuffer;
-	ID3D11Buffer			*m_GSConstantBuffer;
-	ID3D11Buffer			*m_PSConstantBuffer;
-	ID3D11Buffer			*m_CSConstantBuffer;
+	ID3D11Buffer			*m_VSConstantBuffer = nullptr;
+	ID3D11Buffer			*m_GSConstantBuffer = nullptr;
+	ID3D11Buffer			*m_PSConstantBuffer = nullptr;
+	ID3D11Buffer			*m_CSConstantBuffer = nullptr;
 
 	// Private Constructor and Destructor
 	ID3D11Renderer();

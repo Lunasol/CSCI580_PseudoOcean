@@ -19,18 +19,19 @@ struct FFTData
 	Float3 htilde0, htilde0mk;
 };
 
-inline std::complex<float> complexScalarMultiply(const std::complex<float> c, const float scalar)
-{
-	return std::complex<float>(c.real() * scalar, c.imag() * scalar);
-}
-
-inline double dot(Float3 A, Float3 B)
-{
-	return (A.x * B.x) + (A.y * B.y) + (A.z * B.z);
-}
-
 class WaveGenerator
 {
+
+	inline std::complex<float> complexScalarMultiply(const std::complex<float> c, const float scalar)
+	{
+		return std::complex<float>(c.real() * scalar, c.imag() * scalar);
+	}
+
+	inline double dot(Float3 A, Float3 B)
+	{
+		return (A.x * B.x) + (A.y * B.y) + (A.z * B.z);
+	}
+	
 	Float3* m_pGridVertices = nullptr;
 	WaveVertex* m_pWaveVertices = nullptr;
 	double m_time;
