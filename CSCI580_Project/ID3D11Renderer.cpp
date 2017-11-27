@@ -156,6 +156,18 @@ void ID3D11Renderer::CleanupDevice()
 	if (m_pDevice) m_pDevice->Release();
 }
 
+void ID3D11Renderer::UpdateConstantBuffer()
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
+
+	if (m_VSConstantBuffer)
+	{
+		//result = 
+	}
+}
+
 /**
 * HRESULT CompileShaderFromFile()
 *
