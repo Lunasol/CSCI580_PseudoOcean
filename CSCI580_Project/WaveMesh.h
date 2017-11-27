@@ -18,6 +18,7 @@
 struct WaveMesh
 {
 	WaveMesh();
+	WaveMesh(VertexBufferGPU vbuffer, ShaderTechnique shadertech);
 	~WaveMesh();
 
 	// Member Methods

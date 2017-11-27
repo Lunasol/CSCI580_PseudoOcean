@@ -44,32 +44,36 @@ LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
-int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-    UNREFERENCED_PARAMETER( hPrevInstance );
-    UNREFERENCED_PARAMETER( lpCmdLine );
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
 
-    if( FAILED( InitWindow( hInstance, nCmdShow ) ) )
-        return 0;
+	if (FAILED(InitWindow(hInstance, nCmdShow)))
+		return 0;
 
 	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
 
-    if( FAILED( pRenderer->InitDevice(&g_hWnd) ) )
-    {
-        pRenderer->CleanupDevice();
-        return 0;
-    }
+	if (FAILED(pRenderer->InitDevice(&g_hWnd)))
+	{
+		pRenderer->CleanupDevice();
+		return 0;
+	}
 
-	// Initialize default shader techniques
-	/*ShaderTechnique debugTech = ShaderTechnique();
-	debugTech.LoadTechnique(
-		L"./GPUPrograms/DebugShader_VS.hlsl", "main",
-		nullptr, nullptr,
-		L"./GPUPrograms/DebugShader_PS.hlsl", "main",
-		nullptr, nullptr,
-		VertexFormatLayout_CPUTerrain_B0_P0f3_TC0f2_N0f3_B1_I0i3
-	);*/
-	//vertBufGPU.InitBuffer<WaveVertex>(1, 18, 6, 3);
+	/// DEBUGGING
+	VertexBufferGPU debugBuff;
+	ShaderTechnique debugTech;
+	WaveVertex a, b, c, d;
+	a.position = { -.5, 0, 2 };
+	a.normal = { 0, 1, 0 };
+	b = c = d = a;
+	b.position = { .5, 0, 2 };
+	c.position = { .5, 0, 1 };
+	d.position = { -.5, 0, 1 };
+	WaveVertex debugVerts[] = {a, b, c, d};
+	WaveMesh debugMesh;
+	debugMesh.InitWaveMesh(4, 2, 2, debugVerts);
+	/// DEBUGGING
 
     // Main message loop
     MSG msg = {0};
@@ -82,6 +86,8 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
         else
         {
+			pRenderer->PreRender();
+			debugMesh.Draw();
             pRenderer->Render();
         }
     }

@@ -56,4 +56,3 @@ private:
 
 	ID3D11InputLayout *m_pVLayout, *m_pGLayout, *m_pCLayout;
 };
-

@@ -20,6 +20,8 @@ struct VertexBufferGPU
 		WaveVertex *vertices
 	);
 
+	int getNumberOfIndices();
+
 	ID3D11Buffer **getVertexBuffer();
 	ID3D11Buffer *getIndexBuffer();
 

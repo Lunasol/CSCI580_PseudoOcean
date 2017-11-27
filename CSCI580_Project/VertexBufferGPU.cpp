@@ -40,10 +40,10 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexC
 	QuadIndex curIndex;
 	HRESULT result;
 
-	if (vertexCount > 0)
+	/*if (vertexCount > 0)
 	{
 		vertices = EALLOC(WaveVertex, vertexCount);
-	}
+	}*/
 
 	switch (bufferLayout)
 	{
@@ -99,7 +99,7 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexC
 			iBufferDesc.MiscFlags = 0;
 			iBufferDesc.StructureByteStride = 0;
 
-			indexData.pSysMem = indices;// passed in vertices
+			indexData.pSysMem = indices;// Created Indices
 			indexData.SysMemPitch = 0;
 			indexData.SysMemSlicePitch = 0;
 
@@ -116,5 +116,6 @@ void VertexBufferGPU::InitBuffer(int bufferLayout, int vertexCount, int xVertexC
 }
 
 // BufferPointer Getters
+int VertexBufferGPU::getNumberOfIndices() { return m_numIndices; }
 ID3D11Buffer **VertexBufferGPU::getVertexBuffer() { return &m_pVBuffer; }
 ID3D11Buffer *VertexBufferGPU::getIndexBuffer() { return m_pIBuffer; }

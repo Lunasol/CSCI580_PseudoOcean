@@ -50,6 +50,7 @@ struct ID3D11Renderer
 	static ID3D11Renderer *Instance();
 
 	HRESULT InitDevice(HWND *g_hWnd);
+	void PreRender();
 	HRESULT CompileShaderFromFile(
 		_In_ LPCWSTR srcFile,
 		_In_ LPCSTR entryPoint,

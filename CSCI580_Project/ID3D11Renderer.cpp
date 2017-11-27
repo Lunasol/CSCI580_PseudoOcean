@@ -125,6 +125,13 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 }
 
 
+void ID3D11Renderer::PreRender()
+{
+	// Just clear the backbuffer
+	float ClearColor[4] = { 0.3f, 0.3f, 0.3f, 1.0f }; //red,green,blue,alpha
+	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetsView, ClearColor);
+}
+
 //--------------------------------------------------------------------------------------
 // Render the frame
 //--------------------------------------------------------------------------------------
@@ -136,9 +143,6 @@ HRESULT ID3D11Renderer::InitDevice(HWND *g_hWnd)
 */
 void ID3D11Renderer::Render()
 {
-	// Just clear the backbuffer
-	float ClearColor[4] = { 0.3f, 0.3f, 0.3f, 1.0f }; //red,green,blue,alpha
-	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetsView, ClearColor);
 	m_pSwapChain->Present(0, 0);
 }
 
@@ -180,7 +184,7 @@ HRESULT ID3D11Renderer::CompileShaderFromFile(
 	_Outptr_ ID3DBlob** blob
 )
 {
-	ID3DBlob* errorBlob = nullptr;
+	ID3DBlob* errorBlob;
 
 	HRESULT res = D3DX11CompileFromFile
 	(

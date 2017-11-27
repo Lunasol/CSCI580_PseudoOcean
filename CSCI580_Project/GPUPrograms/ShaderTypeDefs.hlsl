@@ -20,17 +20,29 @@ struct DEBUGGING_PS_IN
 // Wave Debugging
 struct WAVE_DEBUGGING_VS_IN
 {
-	float4 iPosL : POSITION;
+	float3 iPosL : POSITION;
 	float3 iNormL : NORMAL;
-	float4 iVertColor : COLOR;
-}
+};
 
 struct WAVE_DEBUGGING_PS_IN
 {
 	float4 iPos : SV_Position;
+	float3 iNorm : NORMAL;
+};
+// End Debugging 
+
+struct WAVEMESH_VS_IN
+{
+	float3 iPosL : POSITION;
+	float3 iNormL : NORMAL;
+	float4 iVertColor : COLOR;
+};
+
+struct WAVEMESH_PS_IN
+{
+	float4 iPos : SV_Position;
 	float4 iNorm : NORMAL;
 	float4 iVertColor : COLOR;
-}
-// End Debugging 
+};
 
 #endif

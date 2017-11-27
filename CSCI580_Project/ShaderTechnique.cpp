@@ -19,6 +19,7 @@ ShaderTechnique::ShaderTechnique()
 	m_pGeometryShader = nullptr;
 	m_pPixelShader = nullptr;
 	m_pComputeShader = nullptr;
+	m_pVLayout = nullptr;
 	/// Set up Constant buffer?
 }
 
@@ -59,6 +60,8 @@ void ShaderTechnique::BindTechnique()
 {
 	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
 
+//	pRenderer->getDeviceContextPtr()->IASetInputLayout(m_pVLayout);
+
 	if (m_pVertexShader) {
 		pRenderer->getDeviceContextPtr()->VSSetShader(m_pVertexShader, NULL, 0);
 		if (m_pPixelShader)
@@ -98,19 +101,22 @@ HRESULT ShaderTechnique::LoadTechnique(
 		if (FAILED(vsResult))
 			exit(EXIT_FAILURE);
 
-		pRenderer->getDevicePtr()->CreateVertexShader(
+		vsResult = pRenderer->getDevicePtr()->CreateVertexShader(
 			m_pVSBlob->GetBufferPointer(), 
 			m_pVSBlob->GetBufferSize(),
 			NULL, 
 			&m_pVertexShader
 		);
 
+		if (FAILED(vsResult))
+			exit(EXIT_FAILURE);
+
 		// Now create the input for the vertex shaders
-		inputLayout = EALLOC(D3D11_INPUT_ELEMENT_DESC, 3);
+		inputLayout = EALLOC(D3D11_INPUT_ELEMENT_DESC, 2);
 		GenerateInputLayout(inputBufLayout, VERTEX, inputLayout);
 		vsResult = pRenderer->getDevicePtr()->CreateInputLayout(
 			inputLayout, 
-			3, 
+			2, 
 			m_pVSBlob->GetBufferPointer(),
 			m_pVSBlob->GetBufferSize(), 
 			&m_pVLayout
@@ -159,12 +165,17 @@ HRESULT ShaderTechnique::LoadTechnique(
 			// TODO PRINT DEBUGGING INFO
 			exit(EXIT_FAILURE);
 		}
-		pRenderer->getDevicePtr()->CreatePixelShader(
+		psResult = pRenderer->getDevicePtr()->CreatePixelShader(
 			m_pPSBlob->GetBufferPointer(),
 			m_pPSBlob->GetBufferSize(),
 			NULL,
 			&m_pPixelShader
 		);
+		if (FAILED(psResult))
+		{
+			// TODO PRINT DEBUGGING INFO
+			exit(EXIT_FAILURE);
+		}
 		m_pPSBlob->Release();
 	}
 	if (csSrcFile)
@@ -206,7 +217,7 @@ void ShaderTechnique::GenerateInputLayout(int inputLayout, int shaderType, D3D11
 				// Element 0
 				elementDescs[0].SemanticName = "POSITION";
 				elementDescs[0].SemanticIndex = 0;
-				elementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+				elementDescs[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 				elementDescs[0].InputSlot = 0;
 				elementDescs[0].AlignedByteOffset = 0;
 				elementDescs[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -222,13 +233,13 @@ void ShaderTechnique::GenerateInputLayout(int inputLayout, int shaderType, D3D11
 				elementDescs[1].InstanceDataStepRate = 0;
 
 				// Element 2
-				elementDescs[2].SemanticName = "COLOR";
+				/*elementDescs[2].SemanticName = "COLOR";
 				elementDescs[2].SemanticIndex = 0;
 				elementDescs[2].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 				elementDescs[2].InputSlot = 0;
 				elementDescs[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 				elementDescs[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-				elementDescs[2].InstanceDataStepRate = 0;
+				elementDescs[2].InstanceDataStepRate = 0;*/
 				break;
 
 			case GEOMETRY:

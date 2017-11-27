@@ -9,9 +9,14 @@
 *
 * SV_TARGET - Paint to the current render target (you can actually dictate multiple SV_TARGET1 etc...)
 */
-float4 main( WAVE_DEBUGGING_PS_IN input ) : SV_TARGET
+
+float4 main( WAVEMESH_PS_IN input ) : SV_TARGET
 {
-    // TODO add lighting calculations
     
-    return float4(1.0, 1.0, 1.0, 1.0);
+    // TODO add lighting calculations
+    float kd = 1.0;
+    float ks = 0.5;
+
+    
+    return input.iVertColor;
 }
