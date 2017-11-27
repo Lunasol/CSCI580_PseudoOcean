@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="fft.cpp" />
     <ClCompile Include="ID3D11Renderer.cpp" />
     <ClCompile Include="WaveMesh.cpp" />
     <ClCompile Include="ShaderTechnique.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="fft.h" />
     <ClInclude Include="WaveMesh.h" />
     <ClInclude Include="VertexStructs.h" />
     <ClInclude Include="ID3D11Renderer.h" />
