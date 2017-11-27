@@ -12,6 +12,10 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# vcxproj files
+*.vcxproj
+*.vcxproj.*
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
