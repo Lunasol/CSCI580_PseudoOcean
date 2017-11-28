@@ -1,5 +1,6 @@
 #include "ID3D11Renderer.h"
 #include "SingletonMacros.h"
+#include <xnamath.h>
 
 // Static Instance Pointer and Instance() Defintion Macro
 DEFINE_SINGLETON_INSTANCE(ID3D11Renderer);
@@ -165,6 +166,9 @@ void ID3D11Renderer::UpdateConstantBuffer()
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
+
+	FLOAT world[4][4];
+
 
 	if (m_VSConstantBuffer)
 	{

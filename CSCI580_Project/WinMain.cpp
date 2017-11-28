@@ -64,12 +64,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	VertexBufferGPU debugBuff;
 	ShaderTechnique debugTech;
 	WaveVertex a, b, c, d;
-	a.position = { -.5, 0, 2 };
+	a.position = { -.5, 0, 0 };
 	a.normal = { 0, 1, 0 };
 	b = c = d = a;
-	b.position = { .5, 0, 2 };
-	c.position = { .5, 0, 1 };
-	d.position = { -.5, 0, 1 };
+	b.position = { .5, 0, 0.0 };
+	c.position = { .5, 0, 1.0 };
+	d.position = { -.5, 0, 1.0 };
 	WaveVertex debugVerts[] = {a, b, c, d};
 	WaveMesh debugMesh;
 	debugMesh.InitWaveMesh(4, 2, 2, debugVerts);

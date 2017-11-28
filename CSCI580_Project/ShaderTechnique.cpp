@@ -60,7 +60,7 @@ void ShaderTechnique::BindTechnique()
 {
 	ID3D11Renderer *pRenderer = ID3D11Renderer::Instance();
 
-//	pRenderer->getDeviceContextPtr()->IASetInputLayout(m_pVLayout);
+	pRenderer->getDeviceContextPtr()->IASetInputLayout(m_pVLayout);
 
 	if (m_pVertexShader) {
 		pRenderer->getDeviceContextPtr()->VSSetShader(m_pVertexShader, NULL, 0);

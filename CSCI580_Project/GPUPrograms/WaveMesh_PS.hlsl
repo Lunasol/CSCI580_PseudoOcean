@@ -16,6 +16,9 @@ float4 main( WAVEMESH_PS_IN input ) : SV_TARGET
     // TODO add lighting calculations
     float kd = 1.0;
     float ks = 0.5;
+    float spec = 35.0;
+
+    float4 color = float4(0.0, 0.0, 1.0, 1.0);
 
     
     return input.iVertColor;
