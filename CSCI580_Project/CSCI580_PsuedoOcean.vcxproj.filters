@@ -78,4 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader.fx">
+      <Filter>GPU Programs</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
