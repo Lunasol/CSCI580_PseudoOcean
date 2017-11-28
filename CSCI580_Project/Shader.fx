@@ -48,9 +48,9 @@ struct Material
 
 
 
-DirectionalLight light;
-Material material;
-float4 ambientLight ;
+
+
+
 float3 eye;
 
 
@@ -84,12 +84,13 @@ struct PS_INPUT
 
 float4 calcPhong(Material M, float4 LColor, float3 N,float3 L, float3 V,float3 R)
 {
-	
-
+	float4 ambientLight ;
+	ambientLight = float4(0.7f,0.0f,0.0f,1.0f);
 	float4 Ia= M.Ka * ambientLight;
 	float4 Id = M.Kd * saturate(dot(N,L));
 	float4 Is = M.Ks * pow(saturate(dot(R,V)),M.specPow);
 	
+	//return float4(Is);
 	return float4(Ia+((Id+Is)*LColor));
 }
 
@@ -110,6 +111,17 @@ PS_INPUT mainVS(VS_INPUT input)
 
 float4 mainPS(PS_INPUT input) : SV_Target
 {
+	DirectionalLight light;
+	light.dir = normalize(float3(1,-1,0));
+	light.color = normalize(float4(1.0f,1.0f,1.0f,1.0f));
+	
+	Material material;
+	material.Ka = 0.5f;
+	material.Kd = 0.5f;
+	material.Ks = 0.5f;
+	material.specPow = 30;
+	
+	
 	
 	input.normal = normalize(input.normal);
 	
