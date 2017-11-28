@@ -15,6 +15,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial06.cpp" />
+    <ClCompile Include="fft.cpp" />
+    <ClCompile Include="WaveGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Tutorial06.fx">
@@ -30,6 +32,8 @@
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="fft.h" />
+    <ClInclude Include="WaveGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tutorial06.rc">

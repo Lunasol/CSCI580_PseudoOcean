@@ -19,6 +19,21 @@ cbuffer ConstantBuffer : register( b0 )
 }
 
 
+
+float3 eye;
+//Light Structure and Variables//
+
+struct DirectionalLight
+{
+	float4 color;
+	float3 dir;
+};
+
+struct Material
+{
+	float Ka, Kd, Ks, specPow;
+};
+
 //--------------------------------------------------------------------------------------
 struct VS_INPUT
 {
@@ -30,6 +45,7 @@ struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
     float3 Norm : TEXCOORD0;
+	float4 worldPosition: POSITION1;
 };
 
 
@@ -42,26 +58,59 @@ PS_INPUT VS( VS_INPUT input )
     output.Pos = mul( input.Pos, World );
     output.Pos = mul( output.Pos, View );
     output.Pos = mul( output.Pos, Projection );
-    output.Norm = mul( input.Norm, World );
+    output.Norm = mul( input.Norm, (float3x3)World );
+
+	output.worldPosition = mul(input.Pos, World);
     
     return output;
 }
 
+
+float4 calcPhong(Material M, float4 LColor, float3 N, float3 L, float3 V, float3 R)
+{
+	float4 ambientLight;
+	ambientLight = float4(1.f, 1.f, 1.f, 1.0f);
+	float4 Ia = M.Ka * ambientLight;
+	float4 Id = M.Kd * saturate(dot(N, L));
+	float4 Is = M.Ks * pow(saturate(dot(R, V)), M.specPow);
+
+	//return float4(Is);
+	return float4(Ia + ((Id + Is)*LColor));
+}
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 float4 PS( PS_INPUT input) : SV_Target
 {
+
+	DirectionalLight light;
+	light.dir = normalize(float3(1,-1,0));
+	light.color = normalize(float4(1.0f,1.0f,1.0f,1.0f));
+
+	Material material;
+	material.Ka = 0.5f;
+	material.Kd = 0.5f;
+	material.Ks = 0.5f;
+	material.specPow = 30;
+
     float4 finalColor = 0;
     
-    //do NdotL lighting for 2 lights
-    for(int i=0; i<2; i++)
-    {
-        finalColor += saturate( dot( (float3)vLightDir[i],input.Norm) * vLightColor[i] );
-    }
-    finalColor.a = 1;
-    return finalColor;
+	input.Norm = normalize(input.Norm);
+	float3 V = normalize(eye - (float3)input.worldPosition);
+
+	float3 R = reflect(light.dir, input.Norm);
+
+	float4 I = calcPhong(material, light.color, input.Norm, -light.dir, V, R);
+
+    ////do NdotL lighting for 2 lights
+    //for(int i=0; i<2; i++)
+    //{
+    //    finalColor += saturate( dot( (float3)vLightDir[i],input.Norm) * vLightColor[i] );
+    //}
+    //finalColor.a = 1;
+    return I;
+	
 }
 
 

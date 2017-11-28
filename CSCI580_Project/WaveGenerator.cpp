@@ -1,17 +1,58 @@
 #include "./WaveGenerator.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <ctime>
 #include <assert.h>
+#include <iostream>
 #undef _USE_MATH_DEFINES
 
-#define INDEX i * xRes + j
-#define H_INDEX i * (xRes - 1) + j
+#define INDEX i * N + j
+#define H_INDEX i * (N - 1) + j
 #define NUM_INDICES(x, y) (x - 1) * (y - 1) * 6
+
+float uniformRandomVariable()
+{
+	return (float)rand() / RAND_MAX;
+}
+
+std::complex<float> gaussianRandomVariable()
+{
+	float x1, x2, w;
+	do
+	{
+		x1 = 2.f * uniformRandomVariable() - 1.f;
+		x2 = 2.f * uniformRandomVariable() - 1.f;
+		w = x1 * x1 + x2 * x2;
+	}
+	while (w >= 1.f);
+	w = sqrt((-2.f * log(w)) / w);
+	return std::complex<float>(x1 * w, x2 * w);
+}
+
+float len(XMFLOAT2 vec)
+{
+	return sqrt(vec.x * vec.x + vec.y * vec.y);
+}
+
+XMFLOAT2 unit(XMFLOAT2 vec2)
+{
+	float l = len(vec2);
+	return XMFLOAT2(vec2.x / l, vec2.y / l);
+}
+
+float len(XMFLOAT3 vec)
+{
+	return sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+}
+
+XMFLOAT3 unit(XMFLOAT3 vec3)
+{
+	float l = len(vec3);
+	return XMFLOAT3(vec3.x / l, vec3.y / l, vec3.y / l);
+}
 
 WaveGenerator::WaveGenerator()
 {
-	m_time = time(nullptr);
+
 }
 
 WaveGenerator::~WaveGenerator()
@@ -38,8 +79,7 @@ WaveGenerator::~WaveGenerator()
 	if (h_tilde_dz)
 		delete[] h_tilde_dz;
 
-	delete fft_x;
-	delete fft_z;
+	delete fft;
 
 	fft_data = nullptr;
 	h_tilde = nullptr;
@@ -48,67 +88,50 @@ WaveGenerator::~WaveGenerator()
 	h_tilde_dx = nullptr;
 	h_tilde_dz = nullptr;
 
-	fft_x = nullptr;
-	fft_z = nullptr;
+	fft = nullptr;
 }
 
-void WaveGenerator::GenerateGrid(int vertexResolutionX, int vertexResolutionZ, float sizeX, float sizeZ)
+void WaveGenerator::GenerateGrid(int N, float length)
 {
-	if (m_pGridVertices)
-		delete[] m_pGridVertices;
-
-	if (m_pWaveVertices)
-		delete[] m_pWaveVertices;
-
-	if (m_pIndices)
-		delete[] m_pIndices;
-
-	xRes = vertexResolutionX;
-	zRes = vertexResolutionZ;
-	xLen = sizeX;
-	zLen = sizeZ;
-	int xResMinus1 = xRes - 1;
-	int zResMinus1 = zRes - 1;
+	this->N = N;
+	this->NMinus1 = N - 1;
+	this->length = length;
 
 	// FFT data initialization
-	fft_x = new FFT(xResMinus1);
-	fft_z = new FFT(zResMinus1);
-	h_tilde = new std::complex<float>[xResMinus1 * zResMinus1];
-	h_tilde_slopex = new std::complex<float>[xResMinus1 * zResMinus1];
-	h_tilde_slopez = new std::complex<float>[xResMinus1 * zResMinus1];
-	h_tilde_dx = new std::complex<float>[xResMinus1 * zResMinus1];
-	h_tilde_dz = new std::complex<float>[xResMinus1 * zResMinus1];
-	fft_data = new FFTData[xRes * zRes];
+	fft = new FFT(NMinus1);
+	h_tilde = new std::complex<float>[NMinus1 * NMinus1];
+	h_tilde_slopex = new std::complex<float>[NMinus1 * NMinus1];
+	h_tilde_slopez = new std::complex<float>[NMinus1 * NMinus1];
+	h_tilde_dx = new std::complex<float>[NMinus1 * NMinus1];
+	h_tilde_dz = new std::complex<float>[NMinus1 * NMinus1];
+	fft_data = new FFTData[N * N];
 
-	m_pGridVertices = new XMFLOAT3[xRes * zRes];
-	m_pWaveVertices = new WaveVertex[xRes * zRes];
-	m_NumIndices = NUM_INDICES(xRes, zRes);
+	m_pGridVertices = new XMFLOAT3[N * N];
+	m_pWaveVertices = new WaveVertex[N * N];
+	m_NumIndices = NUM_INDICES(N, N);
 	m_pIndices = new unsigned int[m_NumIndices];
 
-	m_time = time(nullptr);
+	float xOffset = length / static_cast<float>(N);
+	float zOffset = length / static_cast<float>(N);
 
-	float xOffset = sizeX / static_cast<float>(vertexResolutionX);
-	float zOffset = sizeZ / static_cast<float>(vertexResolutionZ);
-
-	/*for (int i = 0; i < vertexResolutionZ; i++)
+	for (int i = 0; i < N; i++)
 	{
-		float xValue = 0.f;
-		float zValue = (zOffset * i);
-		for (int j = 0; j < vertexResolutionX; j++)
+		for (int j = 0; j < N; j++)
 		{
-			m_pGridVertices[INDEX].x = m_pWaveVertices[INDEX].position.x = xValue += xOffset;
-			m_pGridVertices[INDEX].y = m_pWaveVertices[INDEX].position.y = 0.f;
-			m_pGridVertices[INDEX].z = m_pWaveVertices[INDEX].position.z = zValue;
-		}
-	}*/
+			int index = i * N + j;
 
-	for (int i = 0; i < zRes; i++) {
-		for (int j = 0; j < xRes; j++) {
-			int index = i * xRes + j;
-			
-			m_pGridVertices[INDEX].x = m_pWaveVertices[INDEX].position.x = ((j - xResMinus1) / 2.0f) * sizeX / xResMinus1;
+			std::complex<float> htilde0 = hTilde_0(j, i);
+			std::complex<float> htilde0mk_conj = conj(hTilde_0(-j, -i));
+
+			fft_data[INDEX].htilde0.x = htilde0.real();
+			fft_data[INDEX].htilde0.y = htilde0.imag();
+			fft_data[INDEX].htilde0mk.x = htilde0mk_conj.real();
+			fft_data[INDEX].htilde0mk.y = htilde0mk_conj.imag();
+
+
+			m_pGridVertices[INDEX].x = m_pWaveVertices[INDEX].position.x = ((j - NMinus1) / 2.0f) * length / NMinus1;
 			m_pGridVertices[INDEX].y = m_pWaveVertices[INDEX].position.y = 0.0f;
-			m_pGridVertices[INDEX].z = m_pWaveVertices[INDEX].position.z = ((i - zResMinus1) / 2.0f) * sizeZ / zResMinus1;
+			m_pGridVertices[INDEX].z = m_pWaveVertices[INDEX].position.z = ((i - NMinus1) / 2.0f) * length / NMinus1;
 
 			m_pWaveVertices[INDEX].normal.x = 0.0f;
 			m_pWaveVertices[INDEX].normal.y = 1.0f;
@@ -117,39 +140,43 @@ void WaveGenerator::GenerateGrid(int vertexResolutionX, int vertexResolutionZ, f
 	}
 
 	unsigned int indexCount = 0;
-	for (int i = 0; i < zRes - 1; i++)
+	for (int i = 0; i < N - 1; i++)
 	{
-		for (int j = 0; j < xRes - 1; j++)
+		for (int j = 0; j < N - 1; j++)
 		{
-			m_pIndices[indexCount++] = static_cast<unsigned int>(i * xRes + j);
-			m_pIndices[indexCount++] = static_cast<unsigned int>((i + 1) * xRes + j);
-			m_pIndices[indexCount++] = static_cast<unsigned int>(i * xRes + j + 1);
-			m_pIndices[indexCount++] = static_cast<unsigned int>((i + 1) * xRes + j);
-			m_pIndices[indexCount++] = static_cast<unsigned int>((i + 1) * xRes + 1 + j);
-			m_pIndices[indexCount++] = static_cast<unsigned int>(i * xRes + j + 1);
+			m_pIndices[indexCount++] = static_cast<unsigned int>(i * N + j);
+			m_pIndices[indexCount++] = static_cast<unsigned int>((i + 1) * N + j);
+			m_pIndices[indexCount++] = static_cast<unsigned int>(i * N + j + 1);
+			m_pIndices[indexCount++] = static_cast<unsigned int>((i + 1) * N + j);
+			m_pIndices[indexCount++] = static_cast<unsigned int>((i + 1) * N + 1 + j);
+			m_pIndices[indexCount++] = static_cast<unsigned int>(i * N + j + 1);
 		}
 	}
-	
+
 	assert(indexCount == m_NumIndices, "The index count needs to be the same as the number of indices");
 }
 
-double WaveGenerator::GetTime() const
+double WaveGenerator::GetTime()
 {
-	return time(nullptr) - m_time;
+	clock_t time2 = clock();
+	clock_t timediff = time2 - timer;
+
+	return ((double)timediff) / CLOCKS_PER_SEC;
 }
 
 const WaveVertex* WaveGenerator::GetWave()
 {
-//	return m_pWaveVertices;
+	double t = GetTime();
+	return m_pWaveVertices;
 
 	if (!m_pGridVertices || !m_pWaveVertices)
 		return nullptr;
 
-	double t = GetTime();
+	t = GetTime();
 
-	for (int i = 0; i < xRes; ++i)
+	for (int i = 0; i < N; ++i)
 	{
-		for (int j = 0; j < zRes; ++j)
+		for (int j = 0; j < N; ++j)
 		{
 			float x_input = m_pGridVertices[INDEX].x;
 			float z_input = m_pGridVertices[INDEX].z;
@@ -173,6 +200,8 @@ const WaveVertex* WaveGenerator::GetWave()
 
 const WaveVertex* WaveGenerator::GetWaveFFT()
 {
+//	return m_pWaveVertices;
+
 	if (!m_pGridVertices || !m_pWaveVertices)
 		return nullptr;
 
@@ -180,15 +209,12 @@ const WaveVertex* WaveGenerator::GetWaveFFT()
 
 	float lambda = -1.0f;
 
-	int zResMinus1 = zRes - 1;
-	int xResMinus1 = xRes - 1;
-
-	for (int i = 0; i < zResMinus1; ++i)
+	for (int i = 0; i < NMinus1; ++i)
 	{
-		float kz = M_PI * (2 * i - zResMinus1) / zLen;
-		for (int j = 0; j < xResMinus1; ++j)
+		float kz = M_PI * (2 * i - NMinus1) / length;
+		for (int j = 0; j < NMinus1; ++j)
 		{
-			float kx = M_PI * (2 * j - xResMinus1) / xLen;
+			float kx = M_PI * (2 * j - NMinus1) / length;
 			float len = sqrt(kx * kx + kz * kz);
 
 			h_tilde[H_INDEX] = hTilde(t, j, i);
@@ -207,28 +233,28 @@ const WaveVertex* WaveGenerator::GetWaveFFT()
 		}
 	}
 
-	for (int i = 0; i < zResMinus1; ++i)
+	for (int i = 0; i < NMinus1; ++i)
 	{
-		fft_z->fft(h_tilde, h_tilde, 1, i * zResMinus1);
-		fft_z->fft(h_tilde_slopex, h_tilde_slopex, 1, i * zResMinus1);
-		fft_z->fft(h_tilde_slopez, h_tilde_slopez, 1, i * zResMinus1);
-		fft_z->fft(h_tilde_dx, h_tilde_dx, 1, i * zResMinus1);
-		fft_z->fft(h_tilde_dz, h_tilde_dz, 1, i * zResMinus1);
+		fft->fft(h_tilde, h_tilde, 1, i * NMinus1);
+		fft->fft(h_tilde_slopex, h_tilde_slopex, 1, i * NMinus1);
+		fft->fft(h_tilde_slopez, h_tilde_slopez, 1, i * NMinus1);
+		fft->fft(h_tilde_dx, h_tilde_dx, 1, i * NMinus1);
+		fft->fft(h_tilde_dz, h_tilde_dz, 1, i * NMinus1);
 	}
 
-	for (int j = 0; j < xResMinus1; ++j)
+	for (int j = 0; j < NMinus1; ++j)
 	{
-		fft_x->fft(h_tilde, h_tilde, xResMinus1, j);
-		fft_x->fft(h_tilde_slopex, h_tilde_slopex, xResMinus1, j);
-		fft_x->fft(h_tilde_slopez, h_tilde_slopez, xResMinus1, j);
-		fft_x->fft(h_tilde_dx, h_tilde_dx, xResMinus1, j);
-		fft_x->fft(h_tilde_dz, h_tilde_dz, xResMinus1, j);
+		fft->fft(h_tilde, h_tilde, NMinus1, j);
+		fft->fft(h_tilde_slopex, h_tilde_slopex, NMinus1, j);
+		fft->fft(h_tilde_slopez, h_tilde_slopez, NMinus1, j);
+		fft->fft(h_tilde_dx, h_tilde_dx, NMinus1, j);
+		fft->fft(h_tilde_dz, h_tilde_dz, NMinus1, j);
 	}
 
 	float signs[] = {1.0f, -1.0f};
-	for (int i = 0; i < zResMinus1; i++)
+	for (int i = 0; i < NMinus1; i++)
 	{
-		for (int j = 0; j < xResMinus1; j++)
+		for (int j = 0; j < NMinus1; j++)
 		{
 			int sign = signs[(j + i) & 1];
 
@@ -255,9 +281,9 @@ const WaveVertex* WaveGenerator::GetWaveFFT()
 			// for tiling
 			if (j == 0 && i == 0)
 			{
-				// xRes = Nplus1
-				// xRes
-				int tilingIndex = INDEX + xResMinus1 + xRes * zResMinus1;
+				// N = Nplus1
+				// N
+				int tilingIndex = INDEX + NMinus1 + N * NMinus1;
 				m_pWaveVertices[tilingIndex].position.y = h_tilde[H_INDEX].real();
 				m_pWaveVertices[tilingIndex].position.x = m_pGridVertices[tilingIndex].x + h_tilde_dx[H_INDEX].real() * lambda;
 				m_pWaveVertices[tilingIndex].position.z = m_pGridVertices[tilingIndex].z + h_tilde_dz[H_INDEX].real() * lambda;
@@ -268,7 +294,7 @@ const WaveVertex* WaveGenerator::GetWaveFFT()
 			}
 			if (j == 0)
 			{
-				int tilingIndex = INDEX + xResMinus1;
+				int tilingIndex = INDEX + NMinus1;
 				m_pWaveVertices[tilingIndex].position.y = h_tilde[H_INDEX].real();
 				m_pWaveVertices[tilingIndex].position.x = m_pGridVertices[tilingIndex].x + h_tilde_dx[H_INDEX].real() * lambda;
 				m_pWaveVertices[tilingIndex].position.z = m_pGridVertices[tilingIndex].z + h_tilde_dz[H_INDEX].real() * lambda;
@@ -279,7 +305,7 @@ const WaveVertex* WaveGenerator::GetWaveFFT()
 			}
 			if (i == 0)
 			{
-				int tilingIndex = INDEX + xRes * zResMinus1;
+				int tilingIndex = INDEX + N * NMinus1;
 				m_pWaveVertices[tilingIndex].position.y = h_tilde[H_INDEX].real();
 				m_pWaveVertices[tilingIndex].position.x = m_pGridVertices[tilingIndex].x + h_tilde_dx[H_INDEX].real() * lambda;
 				m_pWaveVertices[tilingIndex].position.z = m_pGridVertices[tilingIndex].z + h_tilde_dz[H_INDEX].real() * lambda;
@@ -310,10 +336,38 @@ std::complex<float> WaveGenerator::hTilde(float t, int j, int i) const
 	return htilde0 * c0 + htilde0mkconj * c1;
 }
 
+float WaveGenerator::phillips(int n_prime, int m_prime)
+{
+	XMFLOAT2 k(M_PI * (2 * n_prime - N) / length, M_PI * (2 * m_prime - N) / length);
+	float k_length = len(k);
+	if (k_length < 0.000001) return 0.0;
+
+	float k_length2 = k_length * k_length;
+	float k_length4 = k_length2 * k_length2;
+
+	float k_dot_w = dot(unit(k), unit(w));
+	float k_dot_w2 = k_dot_w * k_dot_w * k_dot_w * k_dot_w * k_dot_w * k_dot_w;
+
+	float w_length = len(w);
+	float L = w_length * w_length / g;
+	float L2 = L * L;
+
+	float damping = 0.001;
+	float l2 = L2 * damping * damping;
+
+	return A * exp(-1.0f / (k_length2 * L2)) / k_length4 * k_dot_w2 * exp(-k_length2 * l2);
+}
+
+std::complex<float> WaveGenerator::hTilde_0(int n_prime, int m_prime)
+{
+	std::complex<float> r = gaussianRandomVariable();
+	return r * sqrt(phillips(n_prime, m_prime) / 2.0f);
+}
+
 float WaveGenerator::dispersion(int n_prime, int m_prime) const
 {
 	float w_0 = 2.0f * M_PI / 200.0f;
-	float kx = M_PI * (2 * n_prime - xRes + 1) / xLen;
-	float kz = M_PI * (2 * m_prime - zRes + 1) / zLen;
+	float kx = M_PI * (2 * n_prime - N + 1) / length;
+	float kz = M_PI * (2 * m_prime - N + 1) / length;
 	return floor(sqrt(g * sqrt(kx * kx + kz * kz)) / w_0) * w_0;
 }

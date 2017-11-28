@@ -94,7 +94,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
 	// Initialize WaveGen
 	WaveGen = new WaveGenerator();
-	WaveGen->GenerateGrid(20, 20, 50, 50);
+	WaveGen->GenerateGrid(30, 20);
 
     // Main message loop
     MSG msg = {0};
@@ -656,7 +656,7 @@ HRESULT UpdateWaveMesh()
 	bd.CPUAccessFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = WaveGen->GetWave();
+	InitData.pSysMem = WaveGen->GetWaveFFT();
 	hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
 	if (FAILED(hr))
 		return hr;
