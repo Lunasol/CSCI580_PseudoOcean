@@ -48,7 +48,7 @@ class WaveGenerator
 	int N = -1;
 	int NMinus1 = -1;
 	int length = -1;
-	XMFLOAT2 w = XMFLOAT2(32.0f, 32.0f);
+	XMFLOAT2 w = XMFLOAT2(15.0f, .0f);
 
 	// universal constants
 	float g = 9.8f;
@@ -57,7 +57,7 @@ class WaveGenerator
 	float Q = 0.5f;
 	XMFLOAT3 D = {0.9f, .0f, 0.2f};
 	float L = 100.141593f;
-	float A = 0.0005f;
+	float A = 0.0001f;
 	float W = 10.28f;
 	float S = 1.f;
 	float phi = 5;

@@ -13,6 +13,8 @@
 #include "resource.h"
 #include <minwinbase.h>
 #include "WaveGenerator.h"
+#include <iostream>
+#include <conio.h>
 
 
 //--------------------------------------------------------------------------------------
@@ -92,9 +94,26 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         return 0;
     }
 
+	int rasterizerstate = 0;
 	// Initialize WaveGen
 	WaveGen = new WaveGenerator();
-	WaveGen->GenerateGrid(30, 20);
+	WaveGen->GenerateGrid(63, 63);
+
+	// Wireframe
+	ID3D11RasterizerState* rState;
+	D3D11_RASTERIZER_DESC rDesc;
+
+	ZeroMemory(&rDesc, sizeof(D3D11_RASTERIZER_DESC));
+
+	rDesc.FillMode = D3D11_FILL_SOLID;
+	rDesc.CullMode = D3D11_CULL_NONE;
+	rDesc.DepthClipEnable = true;
+
+	g_pd3dDevice->CreateRasterizerState(&rDesc, &rState);
+
+	g_pImmediateContext->RSSetState(rState);
+
+	//rState->Release();
 
     // Main message loop
     MSG msg = {0};
@@ -107,11 +126,36 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
         else
         {
+			if (_kbhit())
+			{
+				char test;
+				std::cin >> test;
+				if (test == 'w')
+				{
+					switch (rasterizerstate)
+					{
+					case 0:
+						rDesc.FillMode = D3D11_FILL_WIREFRAME;
+						g_pd3dDevice->CreateRasterizerState(&rDesc, &rState);
+						g_pImmediateContext->RSSetState(rState);
+						rasterizerstate = 1;
+						break;
+
+					case 1:
+						rDesc.FillMode = D3D11_FILL_SOLID;
+						g_pd3dDevice->CreateRasterizerState(&rDesc, &rState);
+						g_pImmediateContext->RSSetState(rState);
+						rasterizerstate = 0;
+						break;
+					}
+				}
+			}
 			UpdateWaveMesh();
             Render();
         }
     }
 
+	rState->Release();
     CleanupDevice();
 
     return ( int )msg.wParam;
@@ -142,7 +186,7 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow )
 
     // Create window
     g_hInst = hInstance;
-    RECT rc = { 0, 0, 640, 480 };
+    RECT rc = { 0, 0, 1920, 1080 };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
     g_hWnd = CreateWindow( L"TutorialWindowClass", L"Direct3D 11 Tutorial 6", WS_OVERLAPPEDWINDOW,
                            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance,
@@ -365,91 +409,8 @@ HRESULT InitDevice()
     if( FAILED( hr ) )
         return hr;
 
-    // Create vertex buffer
-    SimpleVertex vertices[] =
-    {
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT3( 0.0f, 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT3( 0.0f, 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT3( 0.0f, 1.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT3( 0.0f, 1.0f, 0.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT3( 0.0f, -1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT3( 0.0f, -1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT3( 0.0f, -1.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT3( 0.0f, -1.0f, 0.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT3( -1.0f, 0.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT3( -1.0f, 0.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT3( -1.0f, 0.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT3( -1.0f, 0.0f, 0.0f ) },
-
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT3( 1.0f, 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT3( 1.0f, 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT3( 1.0f, 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT3( 1.0f, 0.0f, 0.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT3( 0.0f, 0.0f, -1.0f ) },
-
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT3( 0.0f, 0.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT3( 0.0f, 0.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT3( 0.0f, 0.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT3( 0.0f, 0.0f, 1.0f ) },
-    };
-
     D3D11_BUFFER_DESC bd;
 	ZeroMemory( &bd, sizeof(bd) );
-    bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof( SimpleVertex ) * 24;
-    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-    D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory( &InitData, sizeof(InitData) );
-    InitData.pSysMem = vertices;
-    hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
-    if( FAILED( hr ) )
-        return hr;
-
-    // Set vertex buffer
-    UINT stride = sizeof( SimpleVertex );
-    UINT offset = 0;
-    g_pImmediateContext->IASetVertexBuffers( 0, 1, &g_pVertexBuffer, &stride, &offset );
-
-    // Create index buffer
-    // Create vertex buffer
-    WORD indices[] =
-    {
-        3,1,0,
-        2,1,3,
-
-        6,4,5,
-        7,4,6,
-
-        11,9,8,
-        10,9,11,
-
-        14,12,13,
-        15,12,14,
-
-        19,17,16,
-        18,17,19,
-
-        22,20,21,
-        23,20,22
-    };
-    bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof( WORD ) * 36;        // 36 vertices needed for 12 triangles in a triangle list
-    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-    InitData.pSysMem = indices;
-    hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pIndexBuffer );
-    if( FAILED( hr ) )
-        return hr;
-
-    // Set index buffer
-    g_pImmediateContext->IASetIndexBuffer( g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0 );
 
     // Set primitive topology
     g_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
@@ -467,29 +428,13 @@ HRESULT InitDevice()
 	g_World = XMMatrixIdentity();
 
     // Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet( 0.0f, 4.0f, -10.0f, 0.0f );
-	XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+	XMVECTOR Eye = XMVectorSet( -21.0f, 30.0f, -21.0f, 0.0f );
+	XMVECTOR At = XMVectorSet( 0.0f, -80.0f, 0.0f, 0.0f );
 	XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	g_View = XMMatrixLookAtLH( Eye, At, Up );
 
     // Initialize the projection matrix
 	g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f );
-	
-	// Wireframe
-	ID3D11RasterizerState* rState;
-	D3D11_RASTERIZER_DESC rDesc;
-
-	ZeroMemory(&rDesc, sizeof(D3D11_RASTERIZER_DESC));
-
-	rDesc.FillMode = D3D11_FILL_WIREFRAME;
-	rDesc.CullMode = D3D11_CULL_NONE;
-	rDesc.DepthClipEnable = true;
-
-	g_pd3dDevice->CreateRasterizerState(&rDesc, &rState);
-
-	g_pImmediateContext->RSSetState(rState);
-
-	rState->Release();
 
     return S_OK;
 }
@@ -589,7 +534,7 @@ void Render()
 	//
     // Clear the back buffer
     //
-    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+    float ClearColor[4] = { 0.125f, 0.125f, 0.125f, 1.0f }; // red, green, blue, alpha
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
 
     //
@@ -618,29 +563,8 @@ void Render()
 	g_pImmediateContext->VSSetConstantBuffers( 0, 1, &g_pConstantBuffer );
 	g_pImmediateContext->PSSetShader( g_pPixelShader, NULL, 0 );
 	g_pImmediateContext->PSSetConstantBuffers( 0, 1, &g_pConstantBuffer );
-	g_pImmediateContext->DrawIndexed(WaveGen->GetNumIndices(), 0, 0 );
+	g_pImmediateContext->DrawIndexed(WaveGen->GetNumIndices(), 0, 0);
 
-    //
-    // Render each light
-    //
-  //  for( int m = 0; m < 2; m++ )
-  //  {
-		//XMMATRIX mLight = XMMatrixTranslationFromVector( 5.0f * XMLoadFloat4( &vLightDirs[m] ) );
-		//XMMATRIX mLightScale = XMMatrixScaling( 0.2f, 0.2f, 0.2f );
-  //      mLight = mLightScale * mLight;
-
-  //      // Update the world variable to reflect the current light
-		//cb1.mWorld = XMMatrixTranspose( mLight );
-		//cb1.vOutputColor = vLightColors[m];
-		//g_pImmediateContext->UpdateSubresource( g_pConstantBuffer, 0, NULL, &cb1, 0, 0 );
-
-		//g_pImmediateContext->PSSetShader( g_pPixelShaderSolid, NULL, 0 );
-		//g_pImmediateContext->DrawIndexed( WaveGen->GetNumIndices(), 0, 0 );
-  //  }
-
-    //
-    // Present our back buffer to our front buffer
-    //
     g_pSwapChain->Present( 0, 0 );
 }
 

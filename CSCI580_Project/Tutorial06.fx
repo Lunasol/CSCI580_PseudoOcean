@@ -18,9 +18,6 @@ cbuffer ConstantBuffer : register( b0 )
 	float4 vOutputColor;
 }
 
-
-
-float3 eye;
 //Light Structure and Variables//
 
 struct DirectionalLight
@@ -66,16 +63,20 @@ PS_INPUT VS( VS_INPUT input )
 }
 
 
-float4 calcPhong(Material M, float4 LColor, float3 N, float3 L, float3 V, float3 R)
+float4 calcPhong(float4 LColor, float3 N, float3 L, float3 V, float3 R)
 {
+	float Ka = 0.5f;
+	float Kd = 0.6f;
+	float Ks = 1.f;
+	int specPower = 2;
 	float4 ambientLight;
-	ambientLight = float4(1.f, 1.f, 1.f, 1.0f);
-	float4 Ia = M.Ka * ambientLight;
-	float4 Id = M.Kd * saturate(dot(N, L));
-	float4 Is = M.Ks * pow(saturate(dot(R, V)), M.specPow);
+	ambientLight = float4(0.f, 0.3f, 0.9f, 1.0f);
+	float4 Ia = Ka * ambientLight;
+	float4 Id = Kd * saturate(dot(N, L));
+	float4 Is = Ks * pow(saturate(dot(R, V)), specPower);
 
-	//return float4(Is);
-	return float4(Ia + ((Id + Is)*LColor));
+	//return float4(Id);
+	return float4(Ia + ((Id + Is)) * LColor);
 }
 
 //--------------------------------------------------------------------------------------
@@ -86,22 +87,16 @@ float4 PS( PS_INPUT input) : SV_Target
 
 	DirectionalLight light;
 	light.dir = normalize(float3(1,-1,0));
-	light.color = normalize(float4(1.0f,1.0f,1.0f,1.0f));
-
-	Material material;
-	material.Ka = 0.5f;
-	material.Kd = 0.5f;
-	material.Ks = 0.5f;
-	material.specPow = 30;
+	light.color = normalize(float4(1.f,1.f,1.f,1.0f));
 
     float4 finalColor = 0;
     
 	input.Norm = normalize(input.Norm);
-	float3 V = normalize(eye - (float3)input.worldPosition);
+	float3 V = normalize(float3(-21.f, 10.f, -21.f) - (float3)input.worldPosition.xyz);
 
 	float3 R = reflect(light.dir, input.Norm);
 
-	float4 I = calcPhong(material, light.color, input.Norm, -light.dir, V, R);
+	float4 I = calcPhong(light.color, input.Norm, -light.dir, V, R);
 
     ////do NdotL lighting for 2 lights
     //for(int i=0; i<2; i++)
